@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from backend.app.database.session import Base
+from fitFlow.backend.app.database.session import Base
 
 class Doctor(Base):
     __tablename__ = "doctors"

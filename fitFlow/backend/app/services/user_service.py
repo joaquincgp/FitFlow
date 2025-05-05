@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
-from backend.app.models.user import User
-from backend.app.schemas.user import UserCreate
-from backend.app.core.security import get_password_hash, verify_password, create_access_token
+from fitFlow.backend.app.models.user import User
+from fitFlow.backend.app.schemas.user import UserCreate
+from fitFlow.backend.app.core.security import get_password_hash, verify_password, create_access_token
 from fastapi import HTTPException
 
 def register_user(user: UserCreate, db: Session):

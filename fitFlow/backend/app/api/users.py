@@ -4,12 +4,12 @@ from typing import List
 from jose import jwt, JWTError
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-from backend.app.schemas.user import UserCreate, UserOut, UserLogin
-from backend.app.models.user import User, UserRole
-from backend.app.services.user_service import register_user, authenticate_user, create_access_token
-from backend.app.database.session import get_db
-from backend.app.core.security import get_password_hash, verify_password
-from backend.app.models.doctor import Doctor
+from fitFlow.backend.app.schemas.user import UserCreate, UserOut, UserLogin
+from fitFlow.backend.app.models.user import User, UserRole
+from fitFlow.backend.app.services.user_service import register_user, authenticate_user, create_access_token
+from fitFlow.backend.app.database.session import get_db
+from fitFlow.backend.app.core.security import get_password_hash, verify_password
+from fitFlow.backend.app.models.doctor import Doctor
 
 
 SECRET_KEY = "udla"
