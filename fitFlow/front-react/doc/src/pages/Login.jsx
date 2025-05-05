@@ -24,11 +24,11 @@ const Login = () => {
     });
 
     if (!res.ok) {
-      setError('Credenciales incorrectas');
+      setError('Cédula o contraseña incorrecta');
     } else {
       const data = await res.json();
       await login(data.access_token);
-      navigate('/');  // Redirige al home
+      navigate('/');
     }
   };
 
@@ -36,11 +36,11 @@ const Login = () => {
     <Box sx={{ backgroundColor: 'background.default', minHeight: '100vh', py: 8 }}>
       <Container maxWidth="sm">
         <Paper elevation={4} sx={{ p: 5 }}>
-          <Typography variant="h5" mb={3} color="primary"  align="center" >
+          <Typography variant="h5" mb={3} color="primary" align="center">
             Iniciar Sesión
           </Typography>
           <TextField
-            label="Correo electrónico"
+            label="Cédula"
             name="username"
             value={form.username}
             onChange={handleChange}

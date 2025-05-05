@@ -1,12 +1,10 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
-import Register from './pages/Register';
-import Users from './pages/Users';
 import Login from './pages/Login';
-import Medicos from './pages/Medicos';
-import Perfil from './pages/Perfil';
+import RegisterClient from './pages/RegisterClient';
+import RegisterNutritionist from './pages/RegisterNutritionist';
+import RegisterAdmin from './pages/RegisterAdmin.jsx';
 
 function App() {
   return (
@@ -14,12 +12,11 @@ function App() {
       <Navbar />
       <div style={{ padding: '2rem', maxWidth: '1280px', margin: '0 auto' }}>
         <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/users" element={<Users />} />
-            <Route path="/medicos" element={<Medicos />} />
-            <Route path="/perfil" element={<Perfil />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register-client" element={<RegisterClient />} />
+          <Route path="/register-nutritionist" element={<RegisterNutritionist />} />
+          <Route path="/register-admin" element={<RegisterAdmin />} />
         </Routes>
       </div>
     </Router>

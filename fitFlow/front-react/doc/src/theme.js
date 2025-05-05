@@ -5,28 +5,30 @@ const theme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#002333', // Azul Marino
-      contrastText: '#FFFFFF',
+      main: '#FF6F00',        // Naranja principal
+      contrastText: '#FFFFFF', // Texto en botones primarios
     },
     secondary: {
-      main: '#159A9C',
+      main: '#1976D2',         // Azul (secundario)
+      contrastText: '#FFFFFF',
     },
     background: {
-      default: '#DEEFE7', // fondo general
-      paper: '#FFFFFF',
+      default: '#FFFFFF',      // Fondo general blanco
+      paper: '#F9F9F9',        // Papel ligeramente gris claro
     },
     text: {
-      primary: '#002333',
-      secondary: '#6c757d',
+      primary: '#002333',      // Azul marino oscuro
+      secondary: '#6c757d',    // Gris secundario
     },
     info: {
-      main: '#B4BEC9',
+      main: '#FFB74D',         // Naranja claro para mensajes/info
     },
   },
   typography: {
     fontFamily: ['"Roboto"', '"Source Sans Pro"', 'sans-serif'].join(','),
     h4: {
       fontWeight: 700,
+      color: '#FF6F00',        // Encabezados h4 en naranja
     },
     button: {
       textTransform: 'none',
@@ -39,12 +41,22 @@ const theme = createTheme({
         root: {
           borderRadius: 10,
         },
+        containedPrimary: {
+          backgroundColor: '#FF6F00',
+          '&:hover': { backgroundColor: '#E65100' }, // Más oscuro al pasar mouse
+        },
+        outlinedSecondary: {
+          borderColor: '#1976D2',
+          color: '#1976D2',
+          '&:hover': { borderColor: '#115293', color: '#115293' },
+        },
       },
     },
     MuiPaper: {
       styleOverrides: {
         root: {
           borderRadius: 12,
+          backgroundColor: '#FFFFFF',
         },
       },
     },

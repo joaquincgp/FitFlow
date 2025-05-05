@@ -1,26 +1,40 @@
-from sqlalchemy import Column, Integer, String, Enum, Date
-from backend.app.database.session import Base
+from pydantic import BaseModel, EmailStr, validator
+from datetime import date
+from typing import Optional
 import enum
+import re
 
-class UserRole(str, enum.Enum):
-    medico = "medico"
-    paciente = "paciente"
+class Sex(str, enum.Enum):
+    Masculino = "Masculino"
+    Femenino = "Femenino"
 
-class User(Base):
-    __tablename__ = "users"
+class UserBase(BaseModel):
+    first_name: str
+    last_name: str
+    cedula: str
+    email: EmailStr
+    password: str
+    birth_date: date
+    sex: Sex
 
-    id = Column(Integer, primary_key=True, index=True)
-    first_name = Column(String, nullable=False)
-    last_name = Column(String, nullable=False)
-    email = Column(String, unique=True, index=True, nullable=False)
-    phone_number = Column(String, nullable=False)
-    hashed_password = Column(String, nullable=False)
-    role = Column(Enum(UserRole), default=UserRole.paciente)
+    @validator("cedula")
+    def validate_cedula(cls, v):
+        if not re.fullmatch(r"\d{6,20}", v):
+            raise ValueError("Cédula must be 6–20 dígitos")
+        return v
 
-    # Nuevos campos para paciente
-    date_of_birth = Column(Date, nullable=True)
-    city = Column(String, nullable=True)
-    country = Column(String, nullable=True)
-    sexual_gender = Column(String, nullable=True)
-    insurance = Column(String, nullable=True)
-    address = Column(String, nullable=True)  # almacenado para uso futuro
+class UserOut(BaseModel):
+    user_id: int
+    first_name: str
+    last_name: str
+    cedula: str
+    email: str
+    birth_date: date
+    sex: Sex
+
+    class Config:
+        orm_mode = True
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str

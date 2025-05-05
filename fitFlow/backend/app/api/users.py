@@ -9,7 +9,7 @@ from fitFlow.backend.app.models.user import User, UserRole
 from fitFlow.backend.app.services.user_service import register_user, authenticate_user, create_access_token
 from fitFlow.backend.app.database.session import get_db
 from fitFlow.backend.app.core.security import get_password_hash, verify_password
-from fitFlow.backend.app.models.doctor import Doctor
+
 
 
 SECRET_KEY = "udla"

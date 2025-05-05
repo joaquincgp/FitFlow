@@ -1,6 +1,28 @@
+# Web framework
 fastapi
-uvicorn
+
+# ASGI server
+uvicorn[standard]
+
+# Pydantic for schema validation
 pydantic
+
+# SQLAlchemy with asyncio support
 sqlalchemy[asyncio]
+
+# Async driver for PostgreSQL (if usas Postgres)
 asyncpg
+
+# Load .env files
 python-dotenv
+
+# Password hashing
+passlib[bcrypt]
+
+# JWT support
+python-jose[cryptography]
+
+# Parse form data (OAuth2 password grant)
+python-multipart
+
+pydantic[email]

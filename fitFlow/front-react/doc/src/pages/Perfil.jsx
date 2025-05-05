@@ -32,12 +32,13 @@ const Perfil = () => {
         <Box>
           <Typography><strong>Nombre:</strong> {profile.first_name} {profile.last_name}</Typography>
           <Typography><strong>Email:</strong> {profile.email}</Typography>
-          <Typography><strong>Teléfono:</strong> {profile.phone_number}</Typography>
+          <Typography><strong>Cédula:</strong> {profile.cedula}</Typography>
           <Typography><strong>Rol:</strong> {profile.role}</Typography>
-          {profile.role === 'paciente' && (
+          {profile.role === 'Cliente' && (
             <>
-              <Typography><strong>Ciudad:</strong> {profile.city}</Typography>
-              <Typography><strong>Género:</strong> {profile.sexual_gender}</Typography>
+              <Typography><strong>Altura:</strong> {profile.height_cm} cm</Typography>
+              <Typography><strong>Peso actual:</strong> {profile.weight_current_kg} kg</Typography>
+              <Typography><strong>Peso meta:</strong> {profile.weight_goal_kg} kg</Typography>
             </>
           )}
         </Box>
