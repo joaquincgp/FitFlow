@@ -1,40 +1,24 @@
-from pydantic import BaseModel, EmailStr, validator
-from datetime import date
-from typing import Optional
+from sqlalchemy import Column, Integer, String, Date, Enum
+from sqlalchemy.orm import relationship
+from fitFlow.backend.app.database.session import Base
 import enum
-import re
 
-class Sex(str, enum.Enum):
+class Sex(enum.Enum):
     Masculino = "Masculino"
     Femenino = "Femenino"
 
-class UserBase(BaseModel):
-    first_name: str
-    last_name: str
-    cedula: str
-    email: EmailStr
-    password: str
-    birth_date: date
-    sex: Sex
+class User(Base):
+    __tablename__ = "users"
 
-    @validator("cedula")
-    def validate_cedula(cls, v):
-        if not re.fullmatch(r"\d{6,20}", v):
-            raise ValueError("Cédula must be 6–20 dígitos")
-        return v
+    user_id = Column(Integer, primary_key=True, index=True)
+    first_name = Column(String(50), nullable=False)
+    last_name = Column(String(50), nullable=False)
+    cedula = Column(String(20), unique=True, nullable=False)
+    email = Column(String(50), unique=True, nullable=False)
+    password = Column(String(128), nullable=False)
+    birth_date = Column(Date, nullable=False)
+    sex = Column(Enum(Sex), nullable=False)
 
-class UserOut(BaseModel):
-    user_id: int
-    first_name: str
-    last_name: str
-    cedula: str
-    email: str
-    birth_date: date
-    sex: Sex
-
-    class Config:
-        orm_mode = True
-
-class UserLogin(BaseModel):
-    email: EmailStr
-    password: str
+    client = relationship("Client", uselist=False, back_populates="user")
+    nutritionist = relationship("Nutritionist", uselist=False, back_populates="user")
+    admin = relationship("Admin", uselist=False, back_populates="user")
