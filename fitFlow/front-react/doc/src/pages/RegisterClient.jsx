@@ -1,18 +1,18 @@
-import { Box, Container, Paper, Typography, TextField, Button } from '@mui/material';
+import { Box, Container, Paper, Typography, TextField, Button, MenuItem, Select, FormControl, InputLabel, FormHelperText } from '@mui/material';
 import { useState } from 'react';
 
 export default function RegisterClient() {
   const [form, setForm] = useState({
     first_name: "", last_name: "", cedula: "", email: "",
     password: "", birth_date: "", sex: "", height_cm: "",
-    weight_current_kg: "", weight_goal_kg: "", activity_level: ""
+    weight_current_kg: "", weight_goal_kg: "", activity_level: "", goal: ""
   });
   const [errors, setErrors] = useState({});
 
   const validate = () => {
     let e = {};
     if (!/^\d{6,20}$/.test(form.cedula)) e.cedula = "Cédula inválida";
-    ["first_name","last_name","email","password","birth_date","sex"].forEach(f=>{
+    ["first_name","last_name","email","password","birth_date","sex","activity_level","goal"].forEach(f=>{
       if (!form[f]?.trim()) e[f]="Requerido";
     });
     return e;
@@ -38,7 +38,9 @@ export default function RegisterClient() {
     <Box sx={{ bgcolor:"white", minHeight:"100vh", py:4 }}>
       <Container maxWidth="sm">
         <Paper sx={{ p:4 }}>
-          <Typography variant="h5" align="center">Registro de Cliente</Typography>
+          <Typography variant="h5" align="center" gutterBottom>Registro de Cliente</Typography>
+
+          {/* Campos de texto */}
           {[
             {name:"cedula",label:"Cédula"},
             {name:"first_name",label:"Nombre"},
@@ -46,11 +48,9 @@ export default function RegisterClient() {
             {name:"email",label:"Email"},
             {name:"password",label:"Contraseña", type:"password"},
             {name:"birth_date",label:"Fecha Nacimiento", type:"date"},
-            {name:"sex",label:"Sexo"},
             {name:"height_cm",label:"Altura (cm)"},
             {name:"weight_current_kg",label:"Peso Actual (kg)"},
-            {name:"weight_goal_kg",label:"Peso Meta (kg)"},
-            {name:"activity_level",label:"Nivel de Actividad"}
+            {name:"weight_goal_kg",label:"Peso Meta (kg)"}
           ].map(f=>(
             <TextField
               key={f.name} name={f.name} label={f.label} type={f.type||"text"}
@@ -58,6 +58,41 @@ export default function RegisterClient() {
               error={!!errors[f.name]} helperText={errors[f.name]} fullWidth sx={{ mb:2 }}
             />
           ))}
+
+          {/* Select de Sexo */}
+          <FormControl fullWidth sx={{ mb:2 }} error={!!errors.sex}>
+            <InputLabel>Sexo</InputLabel>
+            <Select name="sex" value={form.sex} onChange={handleChange} label="Sexo">
+              <MenuItem value="Masculino">Masculino</MenuItem>
+              <MenuItem value="Femenino">Femenino</MenuItem>
+            </Select>
+            <FormHelperText>{errors.sex}</FormHelperText>
+          </FormControl>
+
+          {/* Select de Nivel de Actividad */}
+          <FormControl fullWidth sx={{ mb:2 }} error={!!errors.activity_level}>
+            <InputLabel>Nivel de Actividad</InputLabel>
+            <Select name="activity_level" value={form.activity_level} onChange={handleChange} label="Nivel de Actividad">
+              <MenuItem value="Sedentario">Sedentario</MenuItem>
+              <MenuItem value="Ligero">Ligero</MenuItem>
+              <MenuItem value="Moderado">Moderado</MenuItem>
+              <MenuItem value="Intenso">Intenso</MenuItem>
+              <MenuItem value="Extremo">Extremo</MenuItem>
+            </Select>
+            <FormHelperText>{errors.activity_level}</FormHelperText>
+          </FormControl>
+
+          {/* Select de Meta */}
+          <FormControl fullWidth sx={{ mb:2 }} error={!!errors.goal}>
+            <InputLabel>Meta</InputLabel>
+            <Select name="goal" value={form.goal} onChange={handleChange} label="Meta">
+              <MenuItem value="Bajar_Peso">Bajar Peso</MenuItem>
+              <MenuItem value="Mantener_Peso">Mantener Peso</MenuItem>
+              <MenuItem value="Subir_Peso">Subir Peso</MenuItem>
+            </Select>
+            <FormHelperText>{errors.goal}</FormHelperText>
+          </FormControl>
+
           <Button variant="contained" color="primary" fullWidth onClick={onSubmit}>
             Registrar
           </Button>

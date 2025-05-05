@@ -11,6 +11,11 @@ class ActivityLevel(enum.Enum):
     Intenso = "Intenso"
     Extremo = "Extremo"
 
+class Goal(enum.Enum):
+    Bajar_Peso = "Bajar_Peso"
+    Mantener_Peso = "Mantener_Peso"
+    Subir_Peso = "Subir_Peso"
+
 class Client(Base):
     __tablename__ = "clients"
 
@@ -19,6 +24,7 @@ class Client(Base):
     weight_current_kg = Column(Float, nullable=False)
     weight_goal_kg = Column(Float, nullable=False)
     activity_level = Column(Enum(ActivityLevel), nullable=False)
+    goal = Column(Enum(Goal), nullable=False)  # <-- nuevo campo
 
     user = relationship("User", back_populates="client")
 
@@ -42,10 +48,10 @@ class Client(Base):
         }
         return self.calculate_metabolismo_basal() * factor_map[self.activity_level]
 
-    def calculate_RCDE(self, goal):
+    def calculate_RCDE(self):
         get = self.calculate_GET()
-        if goal == "Bajar_Peso":
+        if self.goal == Goal.Bajar_Peso:
             return get - 500
-        if goal == "Mantener_Peso":
-            return get
-        return get + 300
+        elif self.goal == Goal.Subir_Peso:
+            return get + 300
+        return get

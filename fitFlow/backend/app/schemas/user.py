@@ -40,7 +40,7 @@ class UserOut(BaseModel):
     sex: Sex
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class UserLogin(BaseModel):
     email: EmailStr

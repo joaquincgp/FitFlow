@@ -14,6 +14,11 @@ router = APIRouter(prefix="/register", tags=["Registration"])
 
 @router.post("/client", response_model=ClientOut)
 def register_client(client_data: ClientCreate, db: Session = Depends(get_db)):
+    # Validar si el email ya existe
+    existing_user = db.query(User).filter(User.email == client_data.email).first()
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+
     user = User(
         first_name=client_data.first_name,
         last_name=client_data.last_name,
@@ -21,23 +26,42 @@ def register_client(client_data: ClientCreate, db: Session = Depends(get_db)):
         email=client_data.email,
         password=get_password_hash(client_data.password),
         birth_date=client_data.birth_date,
-        sex=client_data.sex,
+        sex=client_data.sex
     )
-    db.add(user)
-    db.commit()
-    db.refresh(user)
 
     client = Client(
-        client_id=user.user_id,
+        user=user,
         height_cm=client_data.height_cm,
         weight_current_kg=client_data.weight_current_kg,
         weight_goal_kg=client_data.weight_goal_kg,
         activity_level=client_data.activity_level,
+        goal=client_data.goal
     )
+
+    db.add(user)
     db.add(client)
     db.commit()
     db.refresh(client)
-    return client
+
+    return ClientOut(
+        user_id=user.user_id,
+        first_name=user.first_name,
+        last_name=user.last_name,
+        cedula=user.cedula,
+        email=user.email,
+        birth_date=user.birth_date,
+        sex=user.sex,
+        height_cm=client.height_cm,
+        weight_current_kg=client.weight_current_kg,
+        weight_goal_kg=client.weight_goal_kg,
+        activity_level=client.activity_level,
+        goal=client.goal,
+        age=client.calculate_age(),
+        metabolismo_basal=client.calculate_metabolismo_basal(),
+        get=client.calculate_GET(),
+        rcde=client.calculate_RCDE()
+    )
+
 
 @router.post("/nutritionist")
 def register_nutritionist(data: NutritionistCreate, db: Session = Depends(get_db)):
