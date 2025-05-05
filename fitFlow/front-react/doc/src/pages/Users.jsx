@@ -1,14 +1,19 @@
 import {
   Container, Typography, Grid, Card, CardContent, Chip
 } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 export default function Users() {
   const [users, setUsers] = useState([]);
+  const { token } = useContext(AuthContext);
+
   useEffect(() => {
-    fetch("http://localhost:8000/auth/users")
+    fetch("http://localhost:8000/auth/users", {
+      headers: { Authorization: `Bearer ${token}` }
+    })
       .then(r => r.json()).then(setUsers);
-  }, []);
+  }, [token]);
 
   return (
     <Container sx={{ py: 4 }}>

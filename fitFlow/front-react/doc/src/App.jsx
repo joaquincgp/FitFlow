@@ -17,6 +17,7 @@ function App() {
           <Route path="/register-client" element={<RegisterClient />} />
           <Route path="/register-nutritionist" element={<RegisterNutritionist />} />
           <Route path="/register-admin" element={<RegisterAdmin />} />
+
         </Routes>
       </div>
     </Router>

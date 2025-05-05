@@ -8,27 +8,30 @@ export const AuthProvider = ({ children }) => {
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
-  const login = async (token) => {
+  const [token, setToken] = useState(() => localStorage.getItem('token'));
+
+  const login = async (newToken) => {
     const res = await fetch('http://localhost:8000/auth/me', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      headers: { Authorization: `Bearer ${newToken}` }
     });
     const userData = await res.json();
     setUser(userData);
+    setToken(newToken);  // ✅ agregamos token al estado
     localStorage.setItem('user', JSON.stringify(userData));
-    localStorage.setItem('token', token);
+    localStorage.setItem('token', newToken);
   };
 
   const logout = () => {
     setUser(null);
+    setToken(null);  // ✅ limpiamos token
     localStorage.removeItem('user');
     localStorage.removeItem('token');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
