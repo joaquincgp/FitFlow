@@ -1,0 +1,21 @@
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Overrides Material UI background */
+body {
+  margin: 0;
+  background-color: #0A2342; /* azul marino oscuro */
+  color: #F5F5F5; /* blanco piel */
+  min-height: 100vh;
+  font-family: 'Roboto', sans-serif;
+}
+
+a {
+  color: #6B8E23;
+  text-decoration: none;
+}
+a:hover {
+  color: #cefcbf;
+}
