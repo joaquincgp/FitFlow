@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from fitFlow.backend.app.database.session import get_db
@@ -71,7 +73,7 @@ def register_nutritionist(data: NutritionistCreate, db: Session = Depends(get_db
         cedula=data.cedula,
         email=data.email,
         password=get_password_hash(data.password),
-        birth_date=data.birth_date,
+        birth_date=datetime.strptime(data.birth_date, "%Y-%m-%d").date(),
         sex=data.sex,
     )
     db.add(user)
@@ -95,7 +97,7 @@ def register_admin(data: AdminCreate, db: Session = Depends(get_db)):
         cedula=data.cedula,
         email=data.email,
         password=get_password_hash(data.password),
-        birth_date=data.birth_date,
+        birth_date=datetime.strptime(data.birth_date, "%Y-%m-%d").date(),
         sex=data.sex,
     )
     db.add(user)

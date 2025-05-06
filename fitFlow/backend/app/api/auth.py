@@ -13,8 +13,9 @@ from fitFlow.backend.app.models.admin import Admin
 from fitFlow.backend.app.services.user_service import register_user
 from fitFlow.backend.app.core.security import verify_password, create_access_token
 from fitFlow.backend.app.database.session import get_db
+from fitFlow.backend.app.core.security import SECRET_KEY
 
-SECRET_KEY = "fitflow-secret"
+
 ALGORITHM = "HS256"
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
@@ -55,10 +56,12 @@ def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
     access_token = create_access_token({"sub": user.cedula})
     return {"access_token": access_token, "token_type": "bearer"}
 
+
 @router.get("/me", response_model=UserOut)
 def me(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     role = get_role(current_user, db)
     return {**current_user.__dict__, "role": role}
+
 
 @router.get("/users", response_model=List[UserOut])
 def list_users(db: Session = Depends(get_db)):
@@ -68,3 +71,22 @@ def list_users(db: Session = Depends(get_db)):
         role = get_role(user, db)
         result.append({**user.__dict__, "role": role})
     return result
+
+@router.get("/nutritionists", response_model=List[UserOut])
+def list_nutritionists(db: Session = Depends(get_db)):
+    nutritionists = db.query(Nutritionist).all()
+    result = []
+    for n in nutritionists:
+        user = db.query(User).filter(User.user_id == n.nutritionist_id).first()
+        result.append({**user.__dict__, "role": "Nutricionista"})
+    return result
+
+@router.get("/admins", response_model=List[UserOut])
+def list_admins(db: Session = Depends(get_db)):
+    admins = db.query(Admin).all()
+    result = []
+    for a in admins:
+        user = db.query(User).filter(User.user_id == a.admin_id).first()
+        result.append({**user.__dict__, "role": "Administrador"})
+    return result
+
