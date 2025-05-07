@@ -71,20 +71,8 @@ const Home = () => {
           </>
         ) : (
           <>
-            <Button variant="contained" component={Link} to="/register-client" sx={{ mr: 2 }}>
-              Registrar Usuario
-            </Button>
-            <Button variant="outlined" color="secondary" component={Link} to="/login">
-              Iniciar Sesión
-            </Button>
             <Button variant="contained" component={Link} to="/users" sx={{ mr: 2 }}>
               Ver Usuarios
-            </Button>
-            <Button variant="outlined" component={Link} to="/nutritionists" sx={{ mr: 2 }}>
-              Ver Nutricionistas
-            </Button>
-            <Button variant="outlined" component={Link} to="/admins">
-              Ver Administradores
             </Button>
           </>
         )}

@@ -19,6 +19,22 @@ class User(Base):
     birth_date = Column(Date, nullable=False)
     sex = Column(Enum(Sex), nullable=False)
 
-    client = relationship("Client", uselist=False, back_populates="user")
-    nutritionist = relationship("Nutritionist", uselist=False, back_populates="user")
-    admin = relationship("Admin", uselist=False, back_populates="user")
+    client = relationship(
+        "Client",
+        uselist=False,
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
+    nutritionist = relationship(
+        "Nutritionist",
+        uselist=False,
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
+    admin = relationship(
+        "Admin",
+        uselist=False,
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
+

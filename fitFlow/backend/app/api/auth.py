@@ -47,7 +47,6 @@ def get_current_user(token: str = Depends(oauth2_scheme),
     return user
 
 
-
 @router.post("/login")
 def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = db.query(User).filter(User.cedula == form.username).first()
@@ -63,15 +62,7 @@ def me(current_user: User = Depends(get_current_user), db: Session = Depends(get
     return {**current_user.__dict__, "role": role}
 
 
-@router.get("/users", response_model=List[UserOut])
-def list_users(db: Session = Depends(get_db)):
-    users = db.query(User).all()
-    result = []
-    for user in users:
-        role = get_role(user, db)
-        result.append({**user.__dict__, "role": role})
-    return result
-
+# NUTRITIONISTS
 @router.get("/nutritionists", response_model=List[UserOut])
 def list_nutritionists(db: Session = Depends(get_db)):
     nutritionists = db.query(Nutritionist).all()
@@ -81,6 +72,7 @@ def list_nutritionists(db: Session = Depends(get_db)):
         result.append({**user.__dict__, "role": "Nutricionista"})
     return result
 
+# ADMINS
 @router.get("/admins", response_model=List[UserOut])
 def list_admins(db: Session = Depends(get_db)):
     admins = db.query(Admin).all()
@@ -88,5 +80,24 @@ def list_admins(db: Session = Depends(get_db)):
     for a in admins:
         user = db.query(User).filter(User.user_id == a.admin_id).first()
         result.append({**user.__dict__, "role": "Administrador"})
+    return result
+
+# USUARIO
+@router.delete("/users/{user_id}")
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.user_id == user_id).first()
+    if not user:
+        raise HTTPException(404, "Usuario no encontrado")
+    db.delete(user)
+    db.commit()
+    return {"message": "Usuario eliminado correctamente"}
+
+@router.get("/users", response_model=List[UserOut])
+def list_users(db: Session = Depends(get_db)):
+    users = db.query(User).all()
+    result = []
+    for user in users:
+        role = get_role(user, db)
+        result.append({**user.__dict__, "role": role})
     return result
 

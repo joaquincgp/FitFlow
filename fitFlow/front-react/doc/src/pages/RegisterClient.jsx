@@ -34,6 +34,8 @@ export default function RegisterClient() {
     alert(res.ok ? "Cliente registrado!" : "Error al registrar");
   };
 
+
+
   return (
     <Box sx={{ bgcolor:"white", minHeight:"100vh", py:4 }}>
       <Container maxWidth="sm">

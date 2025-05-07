@@ -73,7 +73,7 @@ def register_nutritionist(data: NutritionistCreate, db: Session = Depends(get_db
         cedula=data.cedula,
         email=data.email,
         password=get_password_hash(data.password),
-        birth_date=datetime.strptime(data.birth_date, "%Y-%m-%d").date(),
+        birth_date=data.birth_date,
         sex=data.sex,
     )
     db.add(user)
@@ -89,6 +89,7 @@ def register_nutritionist(data: NutritionistCreate, db: Session = Depends(get_db
     db.commit()
     return {"message": "Nutritionist registered"}
 
+
 @router.post("/admin")
 def register_admin(data: AdminCreate, db: Session = Depends(get_db)):
     user = User(
@@ -97,7 +98,7 @@ def register_admin(data: AdminCreate, db: Session = Depends(get_db)):
         cedula=data.cedula,
         email=data.email,
         password=get_password_hash(data.password),
-        birth_date=datetime.strptime(data.birth_date, "%Y-%m-%d").date(),
+        birth_date=data.birth_date,
         sex=data.sex,
     )
     db.add(user)

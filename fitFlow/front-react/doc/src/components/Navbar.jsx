@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Typography, Button, Menu, MenuItem, IconButton, Avatar } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Menu, MenuItem, IconButton, Avatar, Box } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
@@ -28,7 +28,7 @@ export default function Navbar() {
       <Toolbar>
         <Typography
           variant="h6"
-          sx={{ flexGrow: 1, cursor: 'pointer', textDecoration: 'none' }}
+          sx={{ textDecoration: 'none' }}
           component={Link}
           to="/"
           color="inherit"
@@ -36,12 +36,18 @@ export default function Navbar() {
           Fit Flow
         </Typography>
 
-        {/* ✅ Mostrar solo si es admin */}
-        {user && user.role === "Administrador" ? (
+        {/* ✅ Si es admin, mostrar botón Usuarios */}
+        {user && user.role === "Administrador" && (
+          <Button color="inherit" component={Link} to="/users" sx={{ ml: 2 }}>
+            Usuarios
+          </Button>
+        )}
+
+        <Box sx={{ flexGrow: 1 }} /> {/* Esto empuja el contenido siguiente (avatar o botones) a la derecha */}
+
+        {/* ✅ Mostrar avatar y menú si está logueado */}
+        {user ? (
           <>
-            <Button color="inherit" component={Link} to="/users">
-              Usuarios
-            </Button>
             <IconButton onClick={handleMenuOpen}>
               <Avatar>{user.first_name[0]}</Avatar>
             </IconButton>
@@ -52,7 +58,7 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            {/* ⚠️ Esto se muestra solo si NO es admin */}
+            {/* ✅ Mostrar botones solo si NO está logueado */}
             <Button color="inherit" onClick={handleMenuOpen}>
               Registrar
             </Button>
