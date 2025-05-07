@@ -101,3 +101,13 @@ def list_users(db: Session = Depends(get_db)):
         result.append({**user.__dict__, "role": role})
     return result
 
+#CLIENTS
+@router.get("/clients", response_model=List[UserOut])
+def list_clients(db: Session = Depends(get_db)):
+    clients = db.query(Client).all()
+    result = []
+    for c in clients:
+        user = db.query(User).filter(User.user_id == c.client_id).first()
+        result.append({**user.__dict__, "role": "Cliente"})
+    return result
+

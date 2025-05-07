@@ -43,6 +43,28 @@ export default function Navbar() {
           </Button>
         )}
 
+        {user && user.role === "Administrador" && (
+          <Button color="inherit" component={Link} to="/food-manager" sx={{ ml: 2 }}>
+            Alimentos
+          </Button>
+        )}
+        {user && user.role === "Cliente" && (
+          <Button color="inherit" component={Link} to="/food-log" sx={{ ml: 2 }}>
+            Mi Diario
+          </Button>
+        )}
+        {user && user.role === "Nutricionista" && (
+          <>
+            <Button color="inherit" component={Link} to="/create-plan" sx={{ ml: 2 }}>
+              Crear Plan
+            </Button>
+            <Button color="inherit" component={Link} to="/food-manager" sx={{ ml: 2 }}>
+              Alimentos
+            </Button>
+          </>
+        )}
+
+
         <Box sx={{ flexGrow: 1 }} /> {/* Esto empuja el contenido siguiente (avatar o botones) a la derecha */}
 
         {/* ✅ Mostrar avatar y menú si está logueado */}
