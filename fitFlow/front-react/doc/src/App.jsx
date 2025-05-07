@@ -9,6 +9,10 @@ import Profile from './pages/Profile';
 import Users from './pages/Users';
 import Nutritionists from './pages/Nutritionists';
 import Admins from './pages/Admins';
+import Foods from './pages/Foods';
+import CreatePlan from './pages/CreateNutritionalPlan';
+import FoodLog from './pages/FoodLog';
+import CreateNutritionalPlan from "./pages/CreateNutritionalPlan";
 
 function App() {
   return (
@@ -25,6 +29,11 @@ function App() {
           <Route path="/users" element={<Users />} />
           <Route path="/nutritionists" element={<Nutritionists />} />
           <Route path="/admins" element={<Admins />} />
+
+          <Route path="/food-manager" element={<Foods />} />
+          <Route path="/create-plan" element={<CreateNutritionalPlan />} />
+          <Route path="/food-log" element={<FoodLog />} />
+
         </Routes>
       </div>
     </Router>
