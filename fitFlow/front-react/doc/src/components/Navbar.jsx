@@ -49,10 +49,16 @@ export default function Navbar() {
           </Button>
         )}
         {user && user.role === "Cliente" && (
-          <Button color="inherit" component={Link} to="/food-log" sx={{ ml: 2 }}>
-            Mi Diario
-          </Button>
+          <>
+            <Button color="inherit" component={Link} to="/my-plans" sx={{ ml: 2 }}>
+              Mis Planes
+            </Button>
+            <Button color="inherit" component={Link} to="/food-log" sx={{ ml: 2 }}>
+              Mi Diario
+            </Button>
+          </>
         )}
+
         {user && user.role === "Nutricionista" && (
           <>
             <Button color="inherit" component={Link} to="/create-plan" sx={{ ml: 2 }}>

@@ -13,6 +13,7 @@ import Foods from './pages/Foods';
 import CreatePlan from './pages/CreateNutritionalPlan';
 import FoodLog from './pages/FoodLog';
 import CreateNutritionalPlan from "./pages/CreateNutritionalPlan";
+import MyPlans from "./pages/MyPlans.jsx";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="/food-manager" element={<Foods />} />
           <Route path="/create-plan" element={<CreateNutritionalPlan />} />
           <Route path="/food-log" element={<FoodLog />} />
+          <Route path="/my-plans" element={<MyPlans />} />
 
         </Routes>
       </div>

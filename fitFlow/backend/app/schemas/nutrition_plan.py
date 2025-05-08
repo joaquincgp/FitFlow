@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, constr, conlist, confloat
 from typing import List, Optional
 
@@ -14,3 +16,17 @@ class NutritionPlanCreate(BaseModel):
     name: constr(min_length=2, max_length=100)
     description: Optional[constr(max_length=255)] = None
     meals: conlist(NutritionPlanMealCreate)
+
+class PlanMealOut(BaseModel):
+    id: int
+    meal_type: MealType
+    portion_size: float
+    food_id: int
+    food_name: str
+
+class NutritionPlanOut(BaseModel):
+    plan_id: int
+    name: str
+    description: Optional[str]
+    created_at: Optional[datetime]
+    meals: List[PlanMealOut]
