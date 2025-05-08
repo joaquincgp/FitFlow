@@ -71,7 +71,7 @@ const Home = () => {
           </>
         ) : (
           <>
-            <Button variant="contained" component={Link} to="/users" sx={{ mr: 2 }}>
+            <Button variant="contained" component={Link} to="/nutrition-plan" sx={{ mr: 2 }}>
               Ver Usuarios
             </Button>
           </>

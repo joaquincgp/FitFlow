@@ -1,6 +1,7 @@
 import {
   Container, Typography, Grid, Card, CardContent, IconButton, Tooltip,
-  Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button
+  Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button,
+  FormControl, InputLabel, Select, MenuItem
 } from '@mui/material';
 import { Add, Edit, Delete } from '@mui/icons-material';
 import { useState, useEffect, useContext } from 'react';
@@ -124,14 +125,14 @@ export default function Foods() {
       <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogTitle>{editFood ? "Editar Alimento" : "Nuevo Alimento"}</DialogTitle>
         <DialogContent>
+          {/* Campos normales */}
           {[
             { name: "name", label: "Nombre" },
             { name: "description", label: "Descripción" },
-            { name: "calories_per_portion", label: "Calorías por porción", type: "number" },
+            { name: "calories_per_portion", label: "Calorías por porción (kcal)", type: "number" },
             { name: "protein_per_portion", label: "Proteínas por porción (g)", type: "number" },
             { name: "fat_per_portion", label: "Grasas por porción (g)", type: "number" },
-            { name: "carbs_per_portion", label: "Carbohidratos por porción (g)", type: "number" },
-            { name: "portion_unit", label: "Unidad de porción (g, ml, unidad...)" }
+            { name: "carbs_per_portion", label: "Carbohidratos por porción (g)", type: "number" }
           ].map(f => (
             <TextField
               key={f.name}
@@ -143,6 +144,28 @@ export default function Foods() {
               fullWidth sx={{ mb: 2 }}
             />
           ))}
+
+          {/* Dropdown para Unidad de Porción */}
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Unidad de Porción</InputLabel>
+            <Select
+              name="portion_unit"
+              value={form.portion_unit}
+              label="Unidad de Porción"
+              onChange={handleChange}
+            >
+              <MenuItem value="g">Gramos (g)</MenuItem>
+              <MenuItem value="ml">Mililitros (ml)</MenuItem>
+              <MenuItem value="porcion">Porción</MenuItem>
+              <MenuItem value="unidad">Unidad</MenuItem>
+              <MenuItem value="taza">Taza</MenuItem>
+              <MenuItem value="cucharada">Cucharada</MenuItem>
+              <MenuItem value="cucharadita">Cucharadita</MenuItem>
+              <MenuItem value="pieza">Pieza</MenuItem>
+              <MenuItem value="rebanada">Rebanada</MenuItem>
+              {/* Puedes agregar más si necesitas */}
+            </Select>
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>

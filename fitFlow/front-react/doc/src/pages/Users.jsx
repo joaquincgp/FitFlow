@@ -61,11 +61,6 @@ export default function Users() {
                       <Visibility />
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Editar">
-                    <IconButton color="secondary" onClick={() => handleEdit(u.user_id)}>
-                      <Edit />
-                    </IconButton>
-                  </Tooltip>
                   <Tooltip title="Eliminar">
                     <IconButton color="error" onClick={() => handleDelete(u.user_id)}>
                       <Delete />
