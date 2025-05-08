@@ -5,9 +5,17 @@ Sistema web integral para la gestión de planes nutricionales y seguimiento de a
 
 1. [Descripción del Proyecto](#descripción-del-proyecto)
 2. [Próximas Funcionalidades](#-próximas-funcionalidades)
-3. [Características](#características)
-4. [Créditos](#créditos)
-5. [Licencia](#licencia)
+3. [Instalación](#instalación)
+   - [Requisitos](#requisitos)
+   - [Backend](#backend)
+   - [Frontend](#frontend)
+4. [Uso](#uso)
+   - [Cliente](#cliente)
+   - [Nutricionista](#nutricionista)
+   - [Administrador](#administrador)
+5. [Características](#características)
+6. [Créditos](#créditos)
+7. [Licencia](#licencia)
 
 ## Descripción del Proyecto
 
