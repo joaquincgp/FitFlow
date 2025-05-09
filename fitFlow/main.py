@@ -30,8 +30,10 @@ app.include_router(nutrition_plans_router)
 # CORS
 app.add_middleware(
   CORSMiddleware,
-  allow_origins=["http://localhost:5173"],
+  allow_origins=["http://localhost:5173", "https://fitflow-qnm4.onrender.com"],
   allow_credentials=True,
   allow_methods=["*"],
   allow_headers=["*"],
+
+
 )
