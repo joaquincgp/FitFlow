@@ -112,6 +112,7 @@ def check_plan_compliance(plan_id: int, current_user: User = Depends(get_current
             FoodLog.date == today
         ).first()
         compliance_detail.append({
+            "food_id": meal.food_id,
             "food_name": meal.food.name,
             "meal_type": meal.meal_type,
             "planned_portion": meal.portion_size,

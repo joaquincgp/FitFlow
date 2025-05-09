@@ -16,6 +16,7 @@ router = APIRouter(prefix="/register", tags=["Registration"])
 
 @router.post("/client", response_model=ClientOut)
 def register_client(client_data: ClientCreate, db: Session = Depends(get_db)):
+    print(client_data)
     # Validar si el email o cédula ya existen
     existing_user = db.query(User).filter(
         (User.email == client_data.email) | (User.cedula == client_data.cedula)

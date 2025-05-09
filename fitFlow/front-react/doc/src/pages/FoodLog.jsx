@@ -71,12 +71,12 @@ export default function FoodLog() {
 
     const entriesWithDate = entries.map(e => ({
       food_id: e.food_id,
-      meal_type: String(e.meal_type),  // ✅ fuerza string
+      meal_type: String(e.meal_type), 
       portion_size: parseFloat(e.portion_size),
       date: today
     }));
 
-    console.log("Voy a enviar:", entriesWithDate);  // ✅ para verificar estructura
+    console.log("Voy a enviar:", entriesWithDate);
 
     const res = await fetch("http://localhost:8000/food-logs", {
       method: "POST",
