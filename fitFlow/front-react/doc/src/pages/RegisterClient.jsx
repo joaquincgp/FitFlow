@@ -20,6 +20,10 @@ export default function RegisterClient() {
     ["first_name", "last_name", "email", "password", "birth_date", "sex", "activity_level", "goal"].forEach(f => {
       if (!form[f]?.trim()) e[f] = "Requerido";
     });
+    // ✅ Validar formato de email si no está vacío
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      e.email = "Email no válido";
+    }
     if (!form.height_cm) e.height_cm = "Requerido";
     if (!form.weight_current_kg) e.weight_current_kg = "Requerido";
     if (!form.weight_goal_kg) e.weight_goal_kg = "Requerido";
