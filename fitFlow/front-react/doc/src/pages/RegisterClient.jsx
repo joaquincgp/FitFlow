@@ -20,7 +20,7 @@ export default function RegisterClient() {
     ["first_name", "last_name", "email", "password", "birth_date", "sex", "activity_level", "goal"].forEach(f => {
       if (!form[f]?.trim()) e[f] = "Requerido";
     });
-    // ✅ Validar formato de email si no está vacío
+    // Validar formato de email si no está vacío
     if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       e.email = "Email no válido";
     }

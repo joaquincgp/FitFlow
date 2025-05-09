@@ -22,6 +22,14 @@ export default function RegisterAdmin() {
 
   const validate = () => {
     let e = {};
+    if (!/^\d{10}$/.test(form.cedula)) e.cedula = "La cédula debe tener 10 dígitos";
+    ["first_name", "last_name", "email", "password", "birth_date", "sex", "activity_level", "goal"].forEach(f => {
+      if (!form[f]?.trim()) e[f] = "Requerido";
+    });
+    // Validar formato de email si no está vacío
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      e.email = "Email no válido";
+    }
     // Campos obligatorios
     ["first_name", "last_name", "cedula", "email", "password", "birth_date", "sex", "department", "phone_number"].forEach(f => {
       if (!form[f]?.trim()) e[f] = "Requerido";
