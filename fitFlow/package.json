@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "private": true,
@@ -13,6 +16,8 @@
     "@mui/icons-material": "^7.0.1",
     "@mui/material": "^7.0.1",
     "lottie-react": "^2.4.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-phone-input-2": "^2.15.1",
     "vite": "^6.2.5"
   },
