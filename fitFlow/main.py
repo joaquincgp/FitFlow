@@ -12,7 +12,7 @@ from fitFlow.backend.app.database.session import engine, Base
 from fitFlow.backend.app.api.foods import router as foods_router
 from fitFlow.backend.app.api.food_logs import router as food_logs_router
 from fitFlow.backend.app.api.nutrition_plans import router as nutrition_plans_router
-
+from fitFlow.backend.app.api import dashboard
 app = FastAPI(title="Fit Flow API")
 
 # Crear tablas
@@ -24,6 +24,7 @@ app.include_router(register_router)
 app.include_router(foods_router)
 app.include_router(food_logs_router)
 app.include_router(nutrition_plans_router)
+app.include_router(dashboard.router)
 
 
 
@@ -34,6 +35,5 @@ app.add_middleware(
   allow_credentials=True,
   allow_methods=["*"],
   allow_headers=["*"],
-
 
 )

@@ -8,6 +8,6 @@ from fitFlow.backend.app.models.nutrition_plan_meal import MealType
 
 class FoodLogCreate(BaseModel):
     food_id: int
-    date: Optional[date] = None
+    date: date
     meal_type: MealType
     portion_size: confloat(gt=0)

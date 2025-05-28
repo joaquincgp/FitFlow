@@ -8,7 +8,6 @@ import re
 from fitFlow.backend.app.schemas.user import Sex
 from fitFlow.backend.app.schemas.validators import validate_ecuadorian_cedula
 
-# 🔥 Enums compartidos
 class Sex(str, enum.Enum):
     Masculino = "Masculino"
     Femenino = "Femenino"
@@ -25,7 +24,7 @@ class Goal(str, enum.Enum):
     Mantener_Peso = "Mantener_Peso"
     Subir_Peso = "Subir_Peso"
 
-# ✅ Esquema de entrada (registro)
+
 class ClientCreate(BaseModel):
     first_name: str
     last_name: str
@@ -56,7 +55,7 @@ class ClientCreate(BaseModel):
             raise ValueError("La contraseña debe incluir al menos un carácter especial (@$!%*?&)")
         return v
 
-# ✅ Esquema de salida (respuesta plana)
+
 class ClientOut(BaseModel):
     user_id: int
     first_name: str
