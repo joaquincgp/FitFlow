@@ -71,31 +71,29 @@ const Home = () => {
           </>
         ) : (
           <>
-            <Button variant="contained" component={Link} to="/nutrition-plan" sx={{ mr: 2 }}>
-              Ver Usuarios
-            </Button>
+
           </>
         )}
 
-        {/* 🚨 Debug buttons */}
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="h6" gutterBottom>Pruebas manuales de API:</Typography>
-          <Button variant="contained" onClick={() => callApi("/auth/users")} sx={{ m: 1 }}>Probar /auth/users</Button>
-          <Button variant="contained" onClick={() => callApi("/auth/nutritionists")} sx={{ m: 1 }}>Probar /auth/nutritionists</Button>
-          <Button variant="contained" onClick={() => callApi("/auth/admins")} sx={{ m: 1 }}>Probar /auth/admins</Button>
-        </Box>
+        {/*/!* 🚨 Debug buttons *!/*/}
+        {/*<Box sx={{ mt: 4 }}>*/}
+        {/*  <Typography variant="h6" gutterBottom>Pruebas manuales de API:</Typography>*/}
+        {/*  <Button variant="contained" onClick={() => callApi("/auth/users")} sx={{ m: 1 }}>Probar /auth/users</Button>*/}
+        {/*  <Button variant="contained" onClick={() => callApi("/auth/nutritionists")} sx={{ m: 1 }}>Probar /auth/nutritionists</Button>*/}
+        {/*  <Button variant="contained" onClick={() => callApi("/auth/admins")} sx={{ m: 1 }}>Probar /auth/admins</Button>*/}
+        {/*</Box>*/}
 
-        {error && (
-          <Typography variant="body2" color="error" sx={{ mt: 2 }}>
-            {error}
-          </Typography>
-        )}
-        {apiResult && (
-          <Paper elevation={2} sx={{ p: 2, mt: 2, textAlign: 'left', maxHeight: 200, overflow: 'auto' }}>
-            <Typography variant="subtitle2">Respuesta JSON:</Typography>
-            <pre>{JSON.stringify(apiResult, null, 2)}</pre>
-          </Paper>
-        )}
+        {/*{error && (*/}
+        {/*  <Typography variant="body2" color="error" sx={{ mt: 2 }}>*/}
+        {/*    {error}*/}
+        {/*  </Typography>*/}
+        {/*)}*/}
+        {/*{apiResult && (*/}
+        {/*  <Paper elevation={2} sx={{ p: 2, mt: 2, textAlign: 'left', maxHeight: 200, overflow: 'auto' }}>*/}
+        {/*    <Typography variant="subtitle2">Respuesta JSON:</Typography>*/}
+        {/*    <pre>{JSON.stringify(apiResult, null, 2)}</pre>*/}
+        {/*  </Paper>*/}
+        {/*)}*/}
       </Paper>
     </Box>
   );

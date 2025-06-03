@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Date, UniqueConstraint
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from fitFlow.backend.app.database.session import Base
+
 
 class NutritionPlan(Base):
     __tablename__ = "nutrition_plans"
@@ -11,6 +12,13 @@ class NutritionPlan(Base):
     nutritionist_id = Column(Integer, ForeignKey("nutritionists.nutritionist_id"), nullable=False)
     name = Column(String(100), nullable=False)
     description = Column(String(255), nullable=True)
+    plan_date = Column(Date, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     meals = relationship("NutritionPlanMeal", back_populates="plan", cascade="all, delete-orphan")
+
+    # Agregar índice único para evitar múltiples planes por día
+    __table_args__ = (
+        UniqueConstraint('user_id', 'nutritionist_id', 'plan_date',
+                         name='_user_nutritionist_date_uc'),
+    )
