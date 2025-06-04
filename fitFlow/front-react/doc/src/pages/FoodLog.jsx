@@ -234,7 +234,7 @@ export default function FoodLog() {
     return null; // Válido
   };
 
-  // MEJORADO: Función para calcular el restante disponible con precisión
+  // Función para calcular el restante disponible con precisión
   const getRemainingPortion = (entry) => {
     const planned = parseFloat(entry.planned_portion);
     const consumed = parseFloat(entry.consumed_portion || 0);
@@ -316,7 +316,7 @@ export default function FoodLog() {
       if (response.ok) {
         setMessage(`${validEntries.length} registros guardados correctamente para ${selectedDate}`);
 
-        // MEJORADO: Actualizar el estado del plan con múltiples estrategias
+        // Actualizar el estado del plan con múltiples estrategias
         console.log('Registro exitoso, actualizando estado...');
 
         // Estrategia 1: Actualización inmediata
