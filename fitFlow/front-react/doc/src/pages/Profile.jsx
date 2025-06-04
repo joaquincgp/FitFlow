@@ -279,380 +279,464 @@ export default function Profile() {
   };
 
   return (
-    <div style={{
-      padding: '1.5rem',
-      backgroundColor: '#f8f9fa',
-      minHeight: '100vh',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-    }}>
-
-      {/* Header */}
       <div style={{
-        marginBottom: '2rem',
-        textAlign: 'center',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        color: 'white',
-        padding: '2rem',
-        borderRadius: '16px',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
-      }}>
-        <h1 style={{ margin: 0, fontSize: '2.5rem', fontWeight: '300' }}>
-          🏃‍♂️ Dashboard Nutricional
-        </h1>
-        <p style={{ margin: '0.5rem 0 0 0', fontSize: '1.2rem', opacity: 0.9 }}>
-          {basic_metrics.user_info.name}
-        </p>
-      </div>
-
-      {/* Métricas principales */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-        gap: '1.5rem',
-        marginBottom: '2rem'
+        padding: '1.5rem',
+        backgroundColor: '#f8f9fa',
+        minHeight: '100vh',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
       }}>
 
-        <MetricCard
-          icon="📊"
-          title="IMC"
-          value={`${basic_metrics.calculated_metrics.bmi}`}
-          subtitle={basic_metrics.calculated_metrics.bmi_category}
-          color={colors.info}
-          tooltip={tooltips.bmi}
-        />
-
-        <MetricCard
-          icon="⚡"
-          title="Metabolismo Basal"
-          value={`${basic_metrics.calculated_metrics.metabolismo_basal}`}
-          subtitle="kcal/día en reposo"
-          color={colors.purple}
-          tooltip={tooltips.mb}
-        />
-
-        <MetricCard
-          icon="🔥"
-          title="Gasto Energético Total"
-          value={`${basic_metrics.calculated_metrics.get}`}
-          subtitle="kcal/día con actividad"
-          color={colors.warning}
-          tooltip={tooltips.get}
-        />
-
-        <MetricCard
-          icon="🎯"
-          title="RCDE"
-          value={`${basic_metrics.calculated_metrics.rcde}`}
-          subtitle="kcal/día objetivo"
-          color={colors.primary}
-          tooltip={tooltips.rcde}
-        />
-      </div>
-
-      {/* Métricas de cumplimiento */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: '1.5rem',
-        marginBottom: '2rem'
-      }}>
-
-        {/* Cumplimiento Calórico */}
+        {/* Header */}
         <div style={{
-          backgroundColor: 'white',
-          borderRadius: '12px',
-          padding: '1.5rem',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          border: `2px solid ${getComplianceColor(caloric_compliance.percentage)}20`
+          marginBottom: '2rem',
+          textAlign: 'center',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: 'white',
+          padding: '2rem',
+          borderRadius: '16px',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-            <h3 style={{ margin: 0, color: colors.warning }}>🔥 Calorías Hoy</h3>
-            <InfoTooltip {...tooltips.compliance} />
+          <h1 style={{margin: 0, fontSize: '2.5rem', fontWeight: '300'}}>
+            🏃‍♂️ Dashboard Nutricional
+          </h1>
+          <p style={{margin: '0.5rem 0 0 0', fontSize: '1.2rem', opacity: 0.9}}>
+            {basic_metrics.user_info.name}
+          </p>
+        </div>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '1rem',
+          backgroundColor: 'rgba(255,255,255,0.1)',
+          padding: '1.5rem',
+          borderRadius: '12px',
+          backdropFilter: 'blur(10px)'
+        }}>
+          <div style={{textAlign: 'center'}}>
+            <div style={{fontSize: '1.8rem', fontWeight: 'bold', marginBottom: '0.5rem'}}>
+              {basic_metrics.user_info.age}
+            </div>
+            <div style={{fontSize: '0.9rem', opacity: 0.8}}>
+              Años
+            </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'baseline', marginBottom: '1rem' }}>
-            <span style={{ fontSize: '2.5rem', fontWeight: 'bold', color: getComplianceColor(caloric_compliance.percentage) }}>
+          <div style={{textAlign: 'center'}}>
+            <div style={{fontSize: '1.8rem', fontWeight: 'bold', marginBottom: '0.5rem'}}>
+              {basic_metrics.user_info.height_cm} cm
+            </div>
+            <div style={{fontSize: '0.9rem', opacity: 0.8}}>
+              Altura
+            </div>
+          </div>
+
+          <div style={{textAlign: 'center'}}>
+            <div style={{fontSize: '1.8rem', fontWeight: 'bold', marginBottom: '0.5rem'}}>
+              {basic_metrics.user_info.weight_current} kg
+            </div>
+            <div style={{fontSize: '0.9rem', opacity: 0.8}}>
+              Peso Actual
+            </div>
+          </div>
+
+          <div style={{textAlign: 'center'}}>
+            <div style={{fontSize: '1.8rem', fontWeight: 'bold', marginBottom: '0.5rem'}}>
+              {basic_metrics.user_info.weight_goal} kg
+            </div>
+            <div style={{fontSize: '0.9rem', opacity: 0.8}}>
+              Peso Objetivo
+            </div>
+          </div>
+
+          <div style={{textAlign: 'center'}}>
+            <div style={{fontSize: '1.6rem', fontWeight: 'bold', marginBottom: '0.5rem'}}>
+              {basic_metrics.user_info.goal}
+            </div>
+            <div style={{fontSize: '0.9rem', opacity: 0.8}}>
+              Objetivo
+            </div>
+          </div>
+
+          <div style={{textAlign: 'center'}}>
+            <div style={{fontSize: '1.6rem', fontWeight: 'bold', marginBottom: '0.5rem'}}>
+              {basic_metrics.user_info.activity_level}
+            </div>
+            <div style={{fontSize: '0.9rem', opacity: 0.8}}>
+              Actividad
+            </div>
+          </div>
+        </div>
+
+        {/* Métricas principales */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '1.5rem',
+          marginBottom: '2rem'
+        }}>
+
+          <MetricCard
+              icon="📊"
+              title="IMC"
+              value={`${basic_metrics.calculated_metrics.bmi}`}
+              subtitle={basic_metrics.calculated_metrics.bmi_category}
+              color={colors.info}
+              tooltip={tooltips.bmi}
+          />
+
+          <MetricCard
+              icon="⚡"
+              title="Metabolismo Basal"
+              value={`${basic_metrics.calculated_metrics.metabolismo_basal}`}
+              subtitle="kcal/día en reposo"
+              color={colors.purple}
+              tooltip={tooltips.mb}
+          />
+
+          <MetricCard
+              icon="🔥"
+              title="Gasto Energético Total"
+              value={`${basic_metrics.calculated_metrics.get}`}
+              subtitle="kcal/día con actividad"
+              color={colors.warning}
+              tooltip={tooltips.get}
+          />
+
+          <MetricCard
+              icon="🎯"
+              title="RCDE"
+              value={`${basic_metrics.calculated_metrics.rcde}`}
+              subtitle="kcal/día objetivo"
+              color={colors.primary}
+              tooltip={tooltips.rcde}
+          />
+        </div>
+
+        {/* Métricas de cumplimiento */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '1.5rem',
+          marginBottom: '2rem'
+        }}>
+
+          {/* Cumplimiento Calórico */}
+          <div style={{
+            backgroundColor: 'white',
+            borderRadius: '12px',
+            padding: '1.5rem',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            border: `2px solid ${getComplianceColor(caloric_compliance.percentage)}20`
+          }}>
+            <div style={{display: 'flex', alignItems: 'center', marginBottom: '1rem'}}>
+              <h3 style={{margin: 0, color: colors.warning}}>🔥 Calorías Hoy</h3>
+              <InfoTooltip {...tooltips.compliance} />
+            </div>
+
+            <div style={{display: 'flex', alignItems: 'baseline', marginBottom: '1rem'}}>
+            <span style={{
+              fontSize: '2.5rem',
+              fontWeight: 'bold',
+              color: getComplianceColor(caloric_compliance.percentage)
+            }}>
               {caloric_compliance.consumed_calories}
             </span>
-            <span style={{ fontSize: '1.2rem', marginLeft: '0.5rem', color: '#666' }}>
+              <span style={{fontSize: '1.2rem', marginLeft: '0.5rem', color: '#666'}}>
               / {caloric_compliance.target_calories} kcal
             </span>
-          </div>
+            </div>
 
-          <div style={{
-            width: '100%',
-            height: '12px',
-            backgroundColor: '#e0e0e0',
-            borderRadius: '6px',
-            overflow: 'hidden',
-            marginBottom: '1rem'
-          }}>
             <div style={{
-              height: '100%',
-              width: `${Math.min(caloric_compliance.percentage, 100)}%`,
-              backgroundColor: getComplianceColor(caloric_compliance.percentage),
-              transition: 'width 0.8s ease',
-              borderRadius: '6px'
-            }}></div>
+              width: '100%',
+              height: '12px',
+              backgroundColor: '#e0e0e0',
+              borderRadius: '6px',
+              overflow: 'hidden',
+              marginBottom: '1rem'
+            }}>
+              <div style={{
+                height: '100%',
+                width: `${Math.min(caloric_compliance.percentage, 100)}%`,
+                backgroundColor: getComplianceColor(caloric_compliance.percentage),
+                transition: 'width 0.8s ease',
+                borderRadius: '6px'
+              }}></div>
+            </div>
+
+            <div style={{
+              fontSize: '1.1rem',
+              fontWeight: 'bold',
+              color: getComplianceColor(caloric_compliance.percentage)
+            }}>
+              {caloric_compliance.percentage}% del objetivo
+            </div>
+            <div style={{fontSize: '0.9rem', color: '#666'}}>
+              Diferencia: {caloric_compliance.difference > 0 ? '+' : ''}{caloric_compliance.difference} kcal
+            </div>
           </div>
 
+          {/* Adherencia Semanal */}
           <div style={{
-            fontSize: '1.1rem',
-            fontWeight: 'bold',
-            color: getComplianceColor(caloric_compliance.percentage)
+            backgroundColor: 'white',
+            borderRadius: '12px',
+            padding: '1.5rem',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            border: `2px solid ${colors.info}20`
           }}>
-            {caloric_compliance.percentage}% del objetivo
-          </div>
-          <div style={{ fontSize: '0.9rem', color: '#666' }}>
-            Diferencia: {caloric_compliance.difference > 0 ? '+' : ''}{caloric_compliance.difference} kcal
-          </div>
-        </div>
+            <div style={{display: 'flex', alignItems: 'center', marginBottom: '1rem'}}>
+              <h3 style={{margin: 0, color: colors.info}}>📅 Adherencia Semanal</h3>
+              <InfoTooltip {...tooltips.adherence} />
+            </div>
 
-        {/* Adherencia Semanal */}
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '12px',
-          padding: '1.5rem',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          border: `2px solid ${colors.info}20`
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-            <h3 style={{ margin: 0, color: colors.info }}>📅 Adherencia Semanal</h3>
-            <InfoTooltip {...tooltips.adherence} />
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'baseline', marginBottom: '1rem' }}>
-            <span style={{ fontSize: '2.5rem', fontWeight: 'bold', color: colors.info }}>
+            <div style={{display: 'flex', alignItems: 'baseline', marginBottom: '1rem'}}>
+            <span style={{fontSize: '2.5rem', fontWeight: 'bold', color: colors.info}}>
               {weekly_adherence.adherence_percentage}%
             </span>
-          </div>
+            </div>
 
-          <div style={{
-            width: '100%',
-            height: '12px',
-            backgroundColor: '#e0e0e0',
-            borderRadius: '6px',
-            overflow: 'hidden',
-            marginBottom: '1rem'
-          }}>
             <div style={{
-              height: '100%',
-              width: `${weekly_adherence.adherence_percentage}%`,
-              backgroundColor: colors.info,
-              transition: 'width 0.8s ease',
-              borderRadius: '6px'
-            }}></div>
+              width: '100%',
+              height: '12px',
+              backgroundColor: '#e0e0e0',
+              borderRadius: '6px',
+              overflow: 'hidden',
+              marginBottom: '1rem'
+            }}>
+              <div style={{
+                height: '100%',
+                width: `${weekly_adherence.adherence_percentage}%`,
+                backgroundColor: colors.info,
+                transition: 'width 0.8s ease',
+                borderRadius: '6px'
+              }}></div>
+            </div>
+
+            <div style={{fontSize: '1rem', color: '#666'}}>
+              {weekly_adherence.days_with_logs} de {weekly_adherence.days_elapsed} días con registros
+            </div>
           </div>
 
-          <div style={{ fontSize: '1rem', color: '#666' }}>
-            {weekly_adherence.days_with_logs} de {weekly_adherence.days_elapsed} días con registros
-          </div>
-        </div>
-
-        {/* Progreso hacia objetivo */}
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '12px',
-          padding: '1.5rem',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          border: `2px solid ${colors.success}20`
-        }}>
-          <h3 style={{ margin: '0 0 1rem 0', color: colors.success }}>🎯 Progreso hacia Objetivo</h3>
-
-          <div style={{ marginBottom: '1rem' }}>
-            <p><strong>Peso actual:</strong> {basic_metrics.user_info.weight_current} kg</p>
-            <p><strong>Peso objetivo:</strong> {basic_metrics.user_info.weight_goal} kg</p>
-            <p><strong>Faltan:</strong> {Math.abs(basic_metrics.calculated_metrics.weight_change_needed)} kg</p>
-          </div>
-
+          {/* Progreso hacia objetivo */}
           <div style={{
-            padding: '1rem',
-            backgroundColor: '#f0f8ff',
-            borderRadius: '8px',
-            border: '1px solid #e0e0e0'
+            backgroundColor: 'white',
+            borderRadius: '12px',
+            padding: '1.5rem',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            border: `2px solid ${colors.success}20`
           }}>
-            <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.9rem' }}>
-              <strong>⏱️ Tiempo estimado:</strong> {basic_metrics.calculated_metrics.weeks_to_goal} semanas
-            </p>
-            <p style={{ margin: 0, fontSize: '0.9rem' }}>
-              <strong>🏃‍♂️ Ejercicio recomendado:</strong> {basic_metrics.calculated_metrics.recommended_exercise_calories} kcal/día
-            </p>
+            <h3 style={{margin: '0 0 1rem 0', color: colors.success}}>🎯 Progreso hacia Objetivo</h3>
+
+            <div style={{marginBottom: '1rem'}}>
+              <p><strong>Peso actual:</strong> {basic_metrics.user_info.weight_current} kg</p>
+              <p><strong>Peso objetivo:</strong> {basic_metrics.user_info.weight_goal} kg</p>
+              <p><strong>Faltan:</strong> {Math.abs(basic_metrics.calculated_metrics.weight_change_needed)} kg</p>
+            </div>
+
+            <div style={{
+              padding: '1rem',
+              backgroundColor: '#f0f8ff',
+              borderRadius: '8px',
+              border: '1px solid #e0e0e0'
+            }}>
+              <p style={{margin: '0 0 0.5rem 0', fontSize: '0.9rem'}}>
+                <strong>⏱️ Tiempo estimado:</strong> {basic_metrics.calculated_metrics.weeks_to_goal} semanas
+              </p>
+              <p style={{margin: 0, fontSize: '0.9rem'}}>
+                <strong>🏃‍♂️ Ejercicio
+                  recomendado:</strong> {basic_metrics.calculated_metrics.recommended_exercise_calories} kcal/día
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Gráficos */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+        {/* Gráficos */}
+        <div style={{display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem', marginBottom: '1.5rem'}}>
 
-        {/* Evolución Semanal */}
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '12px',
-          padding: '1.5rem',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-        }}>
-          <h3 style={{ marginBottom: '1rem', color: colors.primary }}>📈 Evolución Calórica - 7 Días</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={week_daily_consumption}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="day_name" stroke="#666" />
-              <YAxis stroke="#666" />
-              <Tooltip
-                formatter={(value, name) => [
-                  `${value} kcal`,
-                  name === 'calories' ? 'Consumido' : 'Objetivo'
-                ]}
-                contentStyle={{
-                  backgroundColor: '#fff',
-                  border: '1px solid #ddd',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-                }}
-              />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="calories"
-                stroke="#8884d8"
-                strokeWidth={3}
-                name="Consumido"
-                dot={{ fill: '#8884d8', strokeWidth: 2, r: 5 }}
-              />
-              <Line
-                type="monotone"
-                dataKey="target"
-                stroke="#82ca9d"
-                strokeDasharray="5 5"
-                strokeWidth={2}
-                name="Objetivo"
-                dot={{ fill: '#82ca9d', strokeWidth: 2, r: 4 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+          {/* Evolución Semanal */}
+          <div style={{
+            backgroundColor: 'white',
+            borderRadius: '12px',
+            padding: '1.5rem',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+          }}>
+            <h3 style={{marginBottom: '1rem', color: colors.primary}}>📈 Evolución Calórica - 7 Días</h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={week_daily_consumption}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0"/>
+                <XAxis dataKey="day_name" stroke="#666"/>
+                <YAxis stroke="#666"/>
+                <Tooltip
+                    formatter={(value, name) => [
+                      `${value} kcal`,
+                      name === 'calories' ? 'Consumido' : 'Objetivo'
+                    ]}
+                    contentStyle={{
+                      backgroundColor: '#fff',
+                      border: '1px solid #ddd',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                    }}
+                />
+                <Legend/>
+                <Line
+                    type="monotone"
+                    dataKey="calories"
+                    stroke="#8884d8"
+                    strokeWidth={3}
+                    name="Consumido"
+                    dot={{fill: '#8884d8', strokeWidth: 2, r: 5}}
+                />
+                <Line
+                    type="monotone"
+                    dataKey="target"
+                    stroke="#82ca9d"
+                    strokeDasharray="5 5"
+                    strokeWidth={2}
+                    name="Objetivo"
+                    dot={{fill: '#82ca9d', strokeWidth: 2, r: 4}}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Macronutrientes */}
+          <div style={{
+            backgroundColor: 'white',
+            borderRadius: '12px',
+            padding: '1.5rem',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+          }}>
+            <h3 style={{marginBottom: '1rem', color: colors.success}}>🥗 Macronutrientes Hoy</h3>
+            <ResponsiveContainer width="100%" height={250}>
+              <PieChart>
+                <Pie
+                    data={macroData}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                    label={({name, value}) => `${name}: ${Math.round(value)} kcal`}
+                >
+                  {macroData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]}/>
+                  ))}
+                </Pie>
+                <Tooltip
+                    formatter={(value) => [`${Math.round(value)} kcal`]}
+                    contentStyle={{
+                      backgroundColor: '#fff',
+                      border: '1px solid #ddd',
+                      borderRadius: '8px'
+                    }}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
-        {/* Macronutrientes */}
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '12px',
-          padding: '1.5rem',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-        }}>
-          <h3 style={{ marginBottom: '1rem', color: colors.success }}>🥗 Macronutrientes Hoy</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={macroData}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-                label={({ name, value }) => `${name}: ${Math.round(value)} kcal`}
-              >
-                {macroData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip
-                formatter={(value) => [`${Math.round(value)} kcal`]}
-                contentStyle={{
-                  backgroundColor: '#fff',
-                  border: '1px solid #ddd',
-                  borderRadius: '8px'
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+        {/* Gráficos adicionales */}
+        <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem'}}>
 
-      {/* Gráficos adicionales */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+          {/* Distribución por Comidas */}
+          <div style={{
+            backgroundColor: 'white',
+            borderRadius: '12px',
+            padding: '1.5rem',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+          }}>
+            <h3 style={{marginBottom: '1rem', color: colors.warning}}>🍽️ Distribución por Comidas</h3>
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={mealData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0"/>
+                <XAxis dataKey="name" stroke="#666"/>
+                <YAxis stroke="#666"/>
+                <Tooltip
+                    formatter={(value) => [`${value} kcal`, 'Calorías']}
+                    contentStyle={{
+                      backgroundColor: '#fff',
+                      border: '1px solid #ddd',
+                      borderRadius: '8px'
+                    }}
+                />
+                <Bar dataKey="calories" fill="#8884d8" radius={[4, 4, 0, 0]}/>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
 
-        {/* Distribución por Comidas */}
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '12px',
-          padding: '1.5rem',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-        }}>
-          <h3 style={{ marginBottom: '1rem', color: colors.warning }}>🍽️ Distribución por Comidas</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={mealData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="name" stroke="#666" />
-              <YAxis stroke="#666" />
-              <Tooltip
-                formatter={(value) => [`${value} kcal`, 'Calorías']}
-                contentStyle={{
-                  backgroundColor: '#fff',
-                  border: '1px solid #ddd',
-                  borderRadius: '8px'
-                }}
-              />
-              <Bar dataKey="calories" fill="#8884d8" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+          {/* Objetivos de Macronutrientes detallados */}
+          <div style={{
+            backgroundColor: 'white',
+            borderRadius: '12px',
+            padding: '1.5rem',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+          }}>
+            <h3 style={{marginBottom: '1rem', color: colors.purple}}>🎯 Objetivos de Macronutrientes</h3>
 
-        {/* Objetivos de Macronutrientes detallados */}
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '12px',
-          padding: '1.5rem',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-        }}>
-          <h3 style={{ marginBottom: '1rem', color: colors.purple }}>🎯 Objetivos de Macronutrientes</h3>
-
-          {[
-            { name: 'Proteínas', consumed: today_consumption.total_protein, target: basic_metrics.macronutrient_targets.protein_g, color: '#f44336' },
-            { name: 'Carbohidratos', consumed: today_consumption.total_carbs, target: basic_metrics.macronutrient_targets.carbs_g, color: '#ff9800' },
-            { name: 'Grasas', consumed: today_consumption.total_fat, target: basic_metrics.macronutrient_targets.fat_g, color: '#4caf50' }
-          ].map((macro, index) => {
-            const percentage = (macro.consumed / macro.target) * 100;
-            return (
-              <div key={index} style={{ marginBottom: '1.5rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                  <span style={{ fontWeight: 'bold' }}>{macro.name}</span>
-                  <span style={{ fontSize: '0.9rem', color: '#666' }}>
+            {[
+              {
+                name: 'Proteínas',
+                consumed: today_consumption.total_protein,
+                target: basic_metrics.macronutrient_targets.protein_g,
+                color: '#f44336'
+              },
+              {
+                name: 'Carbohidratos',
+                consumed: today_consumption.total_carbs,
+                target: basic_metrics.macronutrient_targets.carbs_g,
+                color: '#ff9800'
+              },
+              {
+                name: 'Grasas',
+                consumed: today_consumption.total_fat,
+                target: basic_metrics.macronutrient_targets.fat_g,
+                color: '#4caf50'
+              }
+            ].map((macro, index) => {
+              const percentage = (macro.consumed / macro.target) * 100;
+              return (
+                  <div key={index} style={{marginBottom: '1.5rem'}}>
+                    <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem'}}>
+                      <span style={{fontWeight: 'bold'}}>{macro.name}</span>
+                      <span style={{fontSize: '0.9rem', color: '#666'}}>
                     {Math.round(macro.consumed)}g / {Math.round(macro.target)}g ({Math.round(percentage)}%)
                   </span>
-                </div>
+                    </div>
 
-                <div style={{
-                  width: '100%',
-                  height: '10px',
-                  backgroundColor: '#e0e0e0',
-                  borderRadius: '5px',
-                  overflow: 'hidden'
-                }}>
-                  <div style={{
-                    height: '100%',
-                    width: `${Math.min(percentage, 100)}%`,
-                    backgroundColor: macro.color,
-                    transition: 'width 0.6s ease',
-                    borderRadius: '5px'
-                  }}></div>
-                </div>
+                    <div style={{
+                      width: '100%',
+                      height: '10px',
+                      backgroundColor: '#e0e0e0',
+                      borderRadius: '5px',
+                      overflow: 'hidden'
+                    }}>
+                      <div style={{
+                        height: '100%',
+                        width: `${Math.min(percentage, 100)}%`,
+                        backgroundColor: macro.color,
+                        transition: 'width 0.6s ease',
+                        borderRadius: '5px'
+                      }}></div>
+                    </div>
 
-                {percentage < 80 && (
-                  <div style={{ fontSize: '0.8rem', color: macro.color, marginTop: '0.25rem' }}>
-                    ⚠️ Por debajo del objetivo
+                    {percentage < 80 && (
+                        <div style={{fontSize: '0.8rem', color: macro.color, marginTop: '0.25rem'}}>
+                          ⚠️ Por debajo del objetivo
+                        </div>
+                    )}
+                    {percentage > 120 && (
+                        <div style={{fontSize: '0.8rem', color: macro.color, marginTop: '0.25rem'}}>
+                          🔺 Por encima del objetivo
+                        </div>
+                    )}
                   </div>
-                )}
-                {percentage > 120 && (
-                  <div style={{ fontSize: '0.8rem', color: macro.color, marginTop: '0.25rem' }}>
-                    🔺 Por encima del objetivo
-                  </div>
-                )}
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
+
+
       </div>
-
-
-    </div>
   );
 }

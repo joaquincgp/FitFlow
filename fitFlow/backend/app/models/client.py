@@ -69,8 +69,6 @@ class Client(Base):
         if self.weight_current_kg == self.weight_goal_kg:
             return 100.0
 
-        # Usar peso inicial como referencia (asumiendo que el peso actual era el inicial)
-        # En una implementación real, tendrías un campo weight_initial_kg
         weight_initial = self.weight_current_kg  # Placeholder
 
         progress = abs(weight_initial - self.weight_current_kg) / abs(weight_initial - self.weight_goal_kg)
