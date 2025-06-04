@@ -1,4 +1,3 @@
-# backend/app/api/nutrition_plans.py
 from datetime import date, datetime, timedelta
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session, joinedload
