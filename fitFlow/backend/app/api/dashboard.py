@@ -22,7 +22,31 @@ def get_nutrition_metrics(current_user: User = Depends(get_current_user),
     if not client:
         raise HTTPException(404, "Cliente no encontrado")
 
-    today = date.today()
+    backend_today = date.today()
+
+    # SOLUCIÓN INTELIGENTE: Buscar la fecha más reciente con datos
+    # Buscar en un rango de ±3 días desde hoy
+    dates_to_check = []
+    for i in range(-3, 4):  # -3, -2, -1, 0, 1, 2, 3
+        dates_to_check.append(backend_today + timedelta(days=i))
+
+    # Encontrar qué fechas tienen registros
+    recent_logs = db.query(FoodLog.date, func.count(FoodLog.log_id)).filter(
+        FoodLog.user_id == current_user.user_id,
+        FoodLog.date.in_(dates_to_check)
+    ).group_by(FoodLog.date).order_by(FoodLog.date.desc()).all()
+
+    # Usar la fecha más reciente con datos, o hoy si no hay datos
+    if recent_logs:
+        today = recent_logs[0][0]  # Fecha más reciente con datos
+        print(f"🔍 USANDO FECHA CON DATOS: {today} ({recent_logs[0][1]} registros)")
+    else:
+        today = backend_today
+        print(f"🔍 NO HAY DATOS RECIENTES, USANDO: {today}")
+
+    print(f"🔍 DEBUG FECHA BACKEND: {backend_today}")
+    print(f"🔍 DEBUG FECHA FINAL USADA: {today}")
+
     week_start = today - timedelta(days=today.weekday())
 
     # 1. Métricas básicas del cliente
@@ -49,11 +73,13 @@ def get_nutrition_metrics(current_user: User = Depends(get_current_user),
         "macronutrient_targets": client.get_macronutrient_targets()
     }
 
-    # 2. Consumo calórico de hoy
+    # 2. Consumo calórico del día seleccionado
     today_logs = db.query(FoodLog).options(joinedload(FoodLog.food)).filter(
         FoodLog.user_id == current_user.user_id,
         FoodLog.date == today
     ).all()
+
+    print(f"🔍 REGISTROS ENCONTRADOS: {len(today_logs)} para {today}")
 
     today_consumption = {
         "total_calories": 0,
@@ -75,6 +101,8 @@ def get_nutrition_metrics(current_user: User = Depends(get_current_user),
         today_consumption["total_fat"] += fat
         today_consumption["by_meal"][log.meal_type.value] += calories
 
+    print(f"🔍 TOTAL CALORÍAS CALCULADAS: {today_consumption['total_calories']}")
+
     # 3. Cálculo de cumplimiento calórico
     rcde = client.calculate_RCDE()
     caloric_compliance = {
@@ -86,7 +114,7 @@ def get_nutrition_metrics(current_user: User = Depends(get_current_user),
         "low" if (today_consumption["total_calories"] / rcde) * 100 < 90 else "high"
     }
 
-    # 4. Adherencia semanal
+    # 4. Adherencia semanal (basada en la fecha que estamos usando)
     week_logs = db.query(FoodLog.date, func.count(FoodLog.log_id)).filter(
         FoodLog.user_id == current_user.user_id,
         FoodLog.date >= week_start,
@@ -102,7 +130,7 @@ def get_nutrition_metrics(current_user: User = Depends(get_current_user),
         "adherence_percentage": round((days_with_logs / days_elapsed) * 100, 1) if days_elapsed > 0 else 0
     }
 
-    # 5. Consumo por día de la semana (últimos 7 días)
+    # 5. Consumo por día de la semana (últimos 7 días desde la fecha usada)
     week_daily_consumption = []
     for i in range(7):
         day = today - timedelta(days=i)
@@ -118,7 +146,8 @@ def get_nutrition_metrics(current_user: User = Depends(get_current_user),
             "day_name": day.strftime("%A"),
             "calories": round(day_total, 1),
             "target": round(rcde, 1),
-            "compliance": round((day_total / rcde) * 100, 1) if rcde > 0 else 0
+            "compliance": round((day_total / rcde) * 100, 1) if rcde > 0 else 0,
+            "is_today": day == today
         })
 
     return {
@@ -126,5 +155,12 @@ def get_nutrition_metrics(current_user: User = Depends(get_current_user),
         "today_consumption": today_consumption,
         "caloric_compliance": caloric_compliance,
         "weekly_adherence": weekly_adherence,
-        "week_daily_consumption": list(reversed(week_daily_consumption))  # Orden cronológico
+        "week_daily_consumption": list(reversed(week_daily_consumption)),
+        "debug_info": {
+            "backend_real_date": backend_today.isoformat(),
+            "date_used_for_metrics": today.isoformat(),
+            "logs_found": len(today_logs),
+            "user_id": current_user.user_id,
+            "available_dates": [{"date": str(log_date), "count": count} for log_date, count in recent_logs]
+        }
     }
