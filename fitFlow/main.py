@@ -14,6 +14,7 @@ from fitFlow.backend.app.api.food_logs import router as food_logs_router
 from fitFlow.backend.app.api.nutrition_plans import router as nutrition_plans_router
 from fitFlow.backend.app.api import dashboard
 from fitFlow.backend.app.api import optimizador_planes
+from fitFlow.backend.app.api.nutrition_optimizer_enhanced import router as enhanced_router
 
 
 app = FastAPI(title="Fit Flow API")
@@ -30,6 +31,8 @@ app.include_router(nutrition_plans_router)
 app.include_router(dashboard.router)
 
 app.include_router(optimizador_planes.router)
+
+app.include_router(enhanced_router)
 
 
 # CORS

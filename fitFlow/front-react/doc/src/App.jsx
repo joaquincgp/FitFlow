@@ -10,10 +10,10 @@ import Users from './pages/Users';
 import Nutritionists from './pages/Nutritionists';
 import Admins from './pages/Admins';
 import Foods from './pages/Foods';
-import CreatePlan from './pages/CreateNutritionalPlan';
 import FoodLog from './pages/FoodLog';
 import CreateNutritionalPlan from "./pages/CreateNutritionalPlan";
 import MyPlans from "./pages/MyPlans.jsx";
+import EnhancedNutritionPlanner from "./pages/EnhancedNutritionPlanner";
 
 function App() {
   return (
@@ -35,6 +35,8 @@ function App() {
           <Route path="/create-plan" element={<CreateNutritionalPlan />} />
           <Route path="/food-log" element={<FoodLog />} />
           <Route path="/my-plans" element={<MyPlans />} />
+
+          <Route path="/enhanced-planner" element={<EnhancedNutritionPlanner />} />
 
         </Routes>
       </div>

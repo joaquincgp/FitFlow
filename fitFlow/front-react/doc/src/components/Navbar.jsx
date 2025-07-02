@@ -56,6 +56,9 @@ export default function Navbar() {
             <Button color="inherit" component={Link} to="/food-log" sx={{ ml: 2 }}>
               Mi Diario
             </Button>
+            <Button color="inherit" component={Link} to="/enhanced-planner"  sx={{ ml: 2 }}>
+              Planificador Avanzado
+            </Button>
           </>
         )}
 
