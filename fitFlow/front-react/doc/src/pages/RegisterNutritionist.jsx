@@ -14,6 +14,7 @@ import {
   Alert
 } from '@mui/material';
 import { useState } from 'react';
+import { API_URL } from '../config';
 
 export default function RegisterNutritionist() {
 
@@ -99,7 +100,7 @@ export default function RegisterNutritionist() {
     };
 
     try {
-      const res = await fetch("http://localhost:8000/register/nutritionist", {
+      const res = await fetch(`${API_URL}/register/nutritionist`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(preparedData)

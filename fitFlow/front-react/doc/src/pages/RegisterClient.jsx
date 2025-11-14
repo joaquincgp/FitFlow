@@ -1,5 +1,6 @@
 import { Box, Container, Paper, Typography, TextField, Button, MenuItem, Select, FormControl, InputLabel, FormHelperText, Snackbar, Alert } from '@mui/material';
 import { useState } from 'react';
+import { API_URL } from '../config';
 
 export default function RegisterClient() {
   const [form, setForm] = useState({
@@ -56,7 +57,7 @@ export default function RegisterClient() {
       birth_date: form.birth_date // ya en yyyy-mm-dd
     };
 
-    const res = await fetch("http://localhost:8000/register/client", {
+    const res = await fetch(`${API_URL}/register/client`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(preparedData)

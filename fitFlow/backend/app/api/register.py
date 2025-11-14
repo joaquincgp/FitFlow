@@ -1,6 +1,4 @@
-from datetime import datetime
-
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from fitFlow.backend.app.database.session import get_db
 from fitFlow.backend.app.models.user import User
@@ -11,12 +9,30 @@ from fitFlow.backend.app.schemas.client import ClientCreate, ClientOut
 from fitFlow.backend.app.schemas.nutritionist import NutritionistCreate
 from fitFlow.backend.app.schemas.admin import AdminCreate
 from fitFlow.backend.app.core.security import get_password_hash
+from fitFlow.backend.app.dependencies.auth import get_current_user
+from fitFlow.backend.app.dependencies.auth import get_current_user
+from fastapi import Depends, HTTPException, status
 
 router = APIRouter(prefix="/register", tags=["Registration"])
 
+
+def ensure_role(claims, required_role: str) -> None:
+    roles = claims.get("realm_access", {}).get("roles", [])
+    if required_role not in roles:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="No tienes permisos para registrar usuarios",
+        )
+
 @router.post("/client", response_model=ClientOut)
-def register_client(client_data: ClientCreate, db: Session = Depends(get_db)):
-    print(client_data)
+def register_client(
+    client_data: ClientCreate,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    ensure_role(current_user, "admin")
+    requester = current_user.get("preferred_username")
+    print(f"Usuario autenticado {requester} creando cliente {client_data.email}")
     # Validar si el email o cédula ya existen
     existing_user = db.query(User).filter(
         (User.email == client_data.email) | (User.cedula == client_data.cedula)
@@ -69,7 +85,14 @@ def register_client(client_data: ClientCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/nutritionist")
-def register_nutritionist(data: NutritionistCreate, db: Session = Depends(get_db)):
+def register_nutritionist(
+    data: NutritionistCreate,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    ensure_role(current_user, "admin")
+    requester = current_user.get("preferred_username")
+    print(f"Usuario autenticado {requester} creando nutricionista {data.email}")
     user = User(
         first_name=data.first_name,
         last_name=data.last_name,
@@ -94,7 +117,14 @@ def register_nutritionist(data: NutritionistCreate, db: Session = Depends(get_db
 
 
 @router.post("/admin")
-def register_admin(data: AdminCreate, db: Session = Depends(get_db)):
+def register_admin(
+    data: AdminCreate,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    ensure_role(current_user, "admin")
+    requester = current_user.get("preferred_username")
+    print(f"Usuario autenticado {requester} creando admin {data.email}")
     user = User(
         first_name=data.first_name,
         last_name=data.last_name,

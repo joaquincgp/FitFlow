@@ -1,63 +1,43 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
-  Box, Container, Paper, Typography, TextField, Button, Alert
+  Box, Container, Paper, Typography, Button
 } from '@mui/material';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const { login } = useContext(AuthContext);
-  const [form, setForm] = useState({ username: '', password: '' });
-  const [error, setError] = useState('');
+  const { login, authenticated } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setError('');
-  };
-
-  const handleSubmit = async () => {
-    const res = await fetch('http://localhost:8000/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams(form).toString(),
-    });
-
-    if (!res.ok) {
-      setError('Cédula o contraseña incorrecta');
-    } else {
-      const data = await res.json();
-      await login(data.access_token);
+  useEffect(() => {
+    if (authenticated) {
       navigate('/');
     }
-  };
+  }, [authenticated, navigate]);
 
   return (
     <Box sx={{ backgroundColor: 'background.default', minHeight: '100vh', py: 8 }}>
       <Container maxWidth="sm">
-        <Paper elevation={4} sx={{ p: 5 }}>
+        <Paper elevation={4} sx={{ p: 5, textAlign: 'center' }}>
           <Typography variant="h5" mb={3} color="primary" align="center">
             Iniciar Sesión
           </Typography>
-          <TextField
-            label="Cédula"
-            name="username"
-            value={form.username}
-            onChange={handleChange}
-            fullWidth
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Contraseña"
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            fullWidth
-            sx={{ mb: 2 }}
-          />
-          {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-          <Button variant="contained" color="primary" fullWidth onClick={handleSubmit}>
+          <Typography variant="body1" sx={{ mb: 3 }}>
+            Serás redirigido al portal de autenticación de Keycloak para iniciar sesión de forma segura.
+          </Typography>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            fullWidth 
+            onClick={async () => {
+              console.log('Login button clicked');
+              try {
+                await login();
+              } catch (error) {
+                console.error('Error in login button:', error);
+              }
+            }}
+          >
             Iniciar sesión
           </Button>
         </Paper>

@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 export default function FoodLog() {
   const { token, user } = useContext(AuthContext);
@@ -35,7 +36,7 @@ export default function FoodLog() {
 
   const fetchFoods = async () => {
     try {
-      const response = await fetch("http://localhost:8000/foods", {
+      const response = await fetch(`${API_URL}/foods`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.ok) {
@@ -52,7 +53,7 @@ export default function FoodLog() {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/nutrition-plans/by-date/${selectedDate}`,
+        `${API_URL}/nutrition-plans/by-date/${selectedDate}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -77,7 +78,7 @@ export default function FoodLog() {
       // NUEVO: Agregar timestamp para evitar cache del browser
       const timestamp = new Date().getTime();
       const response = await fetch(
-        `http://localhost:8000/nutrition-plans/status/${selectedDate}?t=${timestamp}`,
+        `${API_URL}/nutrition-plans/status/${selectedDate}?t=${timestamp}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -173,8 +174,8 @@ export default function FoodLog() {
 
     try {
       const endpoint = force
-        ? `http://localhost:8000/nutrition-plans/${planId}/force`
-        : `http://localhost:8000/nutrition-plans/${planId}`;
+        ? `${API_URL}/nutrition-plans/${planId}/force`
+        : `${API_URL}/nutrition-plans/${planId}`;
 
       const response = await fetch(endpoint, {
         method: 'DELETE',
@@ -304,7 +305,7 @@ export default function FoodLog() {
         date: selectedDate
       }));
 
-      const response = await fetch("http://localhost:8000/food-logs", {
+      const response = await fetch(`${API_URL}/food-logs`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

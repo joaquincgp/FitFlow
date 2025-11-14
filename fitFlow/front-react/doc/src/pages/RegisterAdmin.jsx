@@ -1,5 +1,6 @@
 import { Box, Container, Paper, Typography, TextField, Button, Snackbar, Alert } from '@mui/material';
 import { useState } from 'react';
+import { API_URL } from '../config';
 
 export default function RegisterAdmin() {
   const [form, setForm] = useState({
@@ -71,7 +72,7 @@ export default function RegisterAdmin() {
     };
 
     try {
-      const res = await fetch("http://localhost:8000/register/admin", {
+      const res = await fetch(`${API_URL}/register/admin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(preparedData)

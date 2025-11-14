@@ -76,6 +76,13 @@ export default function Navbar() {
 
         <Box sx={{ flexGrow: 1 }} /> {/* Esto empuja el contenido siguiente (avatar o botones) a la derecha */}
 
+        {/* Mostrar botón de Perfil siempre si está logueado (incluso sin rol) */}
+        {user && (!user.role || user.role === "Sin rol") && (
+          <Button color="inherit" component={Link} to="/profile" sx={{ ml: 2 }}>
+            Mi Perfil
+          </Button>
+        )}
+
         {/* ✅ Mostrar avatar y menú si está logueado */}
         {user ? (
           <>

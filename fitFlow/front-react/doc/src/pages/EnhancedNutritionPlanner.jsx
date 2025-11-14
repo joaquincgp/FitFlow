@@ -1,6 +1,7 @@
 // fitFlow/front-react/src/pages/EnhancedNutritionPlanner.jsx
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 export default function EnhancedNutritionPlanner() {
   const { token, user } = useContext(AuthContext);
@@ -25,7 +26,7 @@ export default function EnhancedNutritionPlanner() {
 
   const fetchPlanTypes = async () => {
     try {
-      const response = await fetch('http://localhost:8000/nutrition-enhanced/plan-types', {
+      const response = await fetch(`${API_URL}/nutrition-enhanced/plan-types`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.ok) {
@@ -39,7 +40,7 @@ export default function EnhancedNutritionPlanner() {
 
   const fetchCalculatorTypes = async () => {
     try {
-      const response = await fetch('http://localhost:8000/nutrition-enhanced/calculator-types', {
+      const response = await fetch(`${API_URL}/nutrition-enhanced/calculator-types`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.ok) {
@@ -54,7 +55,7 @@ export default function EnhancedNutritionPlanner() {
   const fetchAnalysis = async (calcType = 'standard') => {
     try {
       const response = await fetch(
-        `http://localhost:8000/nutrition-enhanced/client/${user.user_id}/analysis?calculator_type=${calcType}`,
+        `${API_URL}/nutrition-enhanced/client/${user.user_id}/analysis?calculator_type=${calcType}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.ok) {
@@ -76,7 +77,7 @@ export default function EnhancedNutritionPlanner() {
     setMessage('');
 
     try {
-      const response = await fetch('http://localhost:8000/nutrition-enhanced/generate-plan', {
+      const response = await fetch(`${API_URL}/nutrition-enhanced/generate-plan`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -112,7 +113,7 @@ export default function EnhancedNutritionPlanner() {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:8000/nutrition-enhanced/compare-calculators/${user.user_id}`,
+        `${API_URL}/nutrition-enhanced/compare-calculators/${user.user_id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.ok) {

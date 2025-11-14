@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 export default function MyPlans() {
   const { token, user } = useContext(AuthContext);
@@ -42,7 +43,7 @@ export default function MyPlans() {
       }
 
       const response = await fetch(
-        `http://localhost:8000/nutrition-plans/my-plans?${params.toString()}`,
+        `${API_URL}/nutrition-plans/my-plans?${params.toString()}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -64,7 +65,7 @@ export default function MyPlans() {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:8000/nutrition-plans/week-overview?week_offset=${currentWeekOffset}`,
+        `${API_URL}/nutrition-plans/week-overview?week_offset=${currentWeekOffset}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -91,8 +92,8 @@ export default function MyPlans() {
 
     try {
       const endpoint = force
-        ? `http://localhost:8000/nutrition-plans/${planId}/force`
-        : `http://localhost:8000/nutrition-plans/${planId}`;
+        ? `${API_URL}/nutrition-plans/${planId}/force`
+        : `${API_URL}/nutrition-plans/${planId}`;
 
       const response = await fetch(endpoint, {
         method: 'DELETE',

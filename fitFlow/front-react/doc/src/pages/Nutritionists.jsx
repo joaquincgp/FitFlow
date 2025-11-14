@@ -1,13 +1,14 @@
 import { Container, Typography, Grid, Card, CardContent, Chip } from '@mui/material';
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 export default function Nutritionists() {
   const [nutritionists, setNutritionists] = useState([]);
   const { token } = useContext(AuthContext);
 
   useEffect(() => {
-    fetch("http://localhost:8000/auth/nutritionists", {
+    fetch(`${API_URL}/auth/nutritionists`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(r => r.json())

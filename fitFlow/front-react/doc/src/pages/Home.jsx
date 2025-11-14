@@ -2,6 +2,7 @@ import { Box, Typography, Paper, Button, IconButton, Avatar } from '@mui/materia
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { API_URL } from '../config';
 import Lottie from 'lottie-react';
 import medicalAnimation from '../assets/homePageMainAnimationDOC.json';
 
@@ -21,7 +22,7 @@ const Home = () => {
     }
 
     try {
-      const res = await fetch(`http://localhost:8000${endpoint}`, {
+      const res = await fetch(`${API_URL}${endpoint}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -65,14 +66,40 @@ const Home = () => {
             <Typography variant="h6" gutterBottom>
               Sesión iniciada como {user.first_name} {user.last_name}
             </Typography>
-            <IconButton onClick={() => navigate('/profile')}>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Rol: {user.role || 'Sin rol asignado'}
+            </Typography>
+            {(!user.role || user.role === 'Sin rol') && (
+              <Box sx={{ mt: 2, p: 2, bgcolor: 'warning.light', borderRadius: 2 }}>
+                <Typography variant="body2" color="warning.dark">
+                  ⚠️ No tienes un rol asignado. Por favor, regístrate como Cliente, Nutricionista o Administrador para acceder a todas las funcionalidades.
+                </Typography>
+                <Box sx={{ mt: 2, display: 'flex', gap: 1, justifyContent: 'center' }}>
+                  <Button variant="outlined" size="small" component={Link} to="/register-client">
+                    Registrarse como Cliente
+                  </Button>
+                  <Button variant="outlined" size="small" component={Link} to="/register-nutritionist">
+                    Registrarse como Nutricionista
+                  </Button>
+                  <Button variant="outlined" size="small" component={Link} to="/register-admin">
+                    Registrarse como Admin
+                  </Button>
+                </Box>
+              </Box>
+            )}
+            <IconButton onClick={() => navigate('/profile')} sx={{ mt: 2 }}>
               <Avatar>{user.first_name[0]}</Avatar>
             </IconButton>
           </>
         ) : (
-          <>
-
-          </>
+          <Box sx={{ mt: 3 }}>
+            <Button variant="contained" component={Link} to="/login" sx={{ mr: 2 }}>
+              Iniciar Sesión
+            </Button>
+            <Button variant="outlined" component={Link} to="/register-client">
+              Registrarse
+            </Button>
+          </Box>
         )}
 
         {/*/!* 🚨 Debug buttons *!/*/}

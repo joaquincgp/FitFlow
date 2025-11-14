@@ -3,6 +3,7 @@ import { Visibility, Edit, Delete } from '@mui/icons-material';
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../config';
 
 export default function Users() {
   const [users, setUsers] = useState([]);
@@ -10,7 +11,7 @@ export default function Users() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:8000/auth/users", {
+    fetch(`${API_URL}/auth/users`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(r => r.json())
@@ -19,9 +20,9 @@ export default function Users() {
 
   const handleDelete = async (userId) => {
     if (!window.confirm("¿Seguro que deseas eliminar este usuario?")) return;
-    const res = await fetch(`http://localhost:8000/auth/users/${userId}`, {
-  method: 'DELETE',
-  headers: { Authorization: `Bearer ${token}` }
+    const res = await fetch(`${API_URL}/auth/users/${userId}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
   });
 
     if (res.ok) {

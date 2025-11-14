@@ -1,0 +1,35 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: fitflow-backend
+    ports:
+      - "8080:8000"
+    environment:
+      PYTHONUNBUFFERED: "1"
+      KEYCLOAK_CLIENT_ID: fitflow-web
+      KEYCLOAK_ISSUER: http://localhost:8081/realms/fitFlow
+      KEYCLOAK_JWKS_URL: http://host.docker.internal:8081/realms/fitFlow/protocol/openid-connect/certs
+    volumes:
+      - ./data:/app/fitFlow/data
+      - ./backend:/app/fitFlow/backend
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./front-react
+      dockerfile: Dockerfile
+    container_name: fitflow-frontend
+    ports:
+      - "5174:5173"
+    environment:
+      NODE_ENV: development
+      VITE_API_URL: http://localhost:8080
+      VITE_KEYCLOAK_URL: http://localhost:8081
+      VITE_KEYCLOAK_REALM: fitFlow
+      VITE_KEYCLOAK_CLIENT_ID: fitflow-web
+    depends_on:
+      - backend
+    restart: unless-stopped
+

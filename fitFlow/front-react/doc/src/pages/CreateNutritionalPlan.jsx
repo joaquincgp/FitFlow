@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 export default function CreateNutritionalPlan() {
   const { token, user } = useContext(AuthContext);
@@ -32,8 +33,8 @@ export default function CreateNutritionalPlan() {
   const fetchInitialData = async () => {
     try {
       const [foodsRes, clientsRes] = await Promise.all([
-        fetch("http://localhost:8000/foods", { headers: { Authorization: `Bearer ${token}` } }),
-        fetch("http://localhost:8000/auth/clients", { headers: { Authorization: `Bearer ${token}` } })
+        fetch(`${API_URL}/foods`, { headers: { Authorization: `Bearer ${token}` } }),
+        fetch(`${API_URL}/auth/clients`, { headers: { Authorization: `Bearer ${token}` } })
       ]);
 
       if (foodsRes.ok) {
@@ -56,7 +57,7 @@ export default function CreateNutritionalPlan() {
     setCheckingExisting(true);
     try {
       const response = await fetch(
-        `http://localhost:8000/nutrition-plans/my-plans?specific_date=${form.plan_date}`,
+        `${API_URL}/nutrition-plans/my-plans?specific_date=${form.plan_date}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -114,7 +115,7 @@ export default function CreateNutritionalPlan() {
 
     setGeneratingAI(true);
     try {
-      const response = await fetch("http://localhost:8000/nutrition-optimizer/generate", {
+      const response = await fetch(`${API_URL}/nutrition-optimizer/generate`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -205,7 +206,7 @@ console.log("JSON que se enviará:", jsonBody);
     }
 
     try {
-      const response = await fetch("http://localhost:8000/nutrition-plans", {
+      const response = await fetch(`${API_URL}/nutrition-plans`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
