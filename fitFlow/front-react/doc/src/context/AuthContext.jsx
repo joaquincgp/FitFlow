@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useMemo } from 'react';
 import keycloakModule from '../keycloak';
 import { API_URL } from '../config';
+import { Box, CircularProgress, Typography } from '@mui/material';
 
 export const AuthContext = createContext();
 
@@ -8,11 +9,10 @@ export const AuthProvider = ({ children }) => {
   const [initialized, setInitialized] = useState(false);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [processingAuth, setProcessingAuth] = useState(false);
 
-  // Usar la instancia importada directamente
   const keycloak = keycloakModule;
 
-  // Verificar que keycloak esté disponible
   if (!keycloak || typeof keycloak.init !== 'function') {
     console.error('Keycloak instance is not available or invalid:', keycloak);
     return <div>Error: Keycloak no está configurado correctamente</div>;
@@ -38,22 +38,81 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Detectar si venimos de un redirect de Keycloak
+  const isKeycloakRedirect = () => {
+    const hash = window.location.hash;
+    return hash.includes('code=') && hash.includes('state=');
+  };
+
   useEffect(() => {
     let refreshInterval;
     let mounted = true;
+    let authTimeout;
 
     const initKeycloak = async () => {
-      // Prevenir inicialización múltiple - verificar si ya está inicializado
-      if (keycloak.authenticated !== undefined) {
-        if (keycloak.authenticated && mounted) {
+      const isRedirect = isKeycloakRedirect();
+      
+      // Si venimos de redirect, mostrar pantalla de carga
+      if (isRedirect) {
+        setProcessingAuth(true);
+      }
+
+      // Configurar listeners de Keycloak ANTES de init
+      keycloak.onAuthSuccess = () => {
+        console.log('Keycloak authentication successful');
+        if (mounted && keycloak.token) {
+          setToken(keycloak.token);
+          fetchUserProfile(keycloak.token).then(() => {
+            if (mounted) {
+              setProcessingAuth(false);
+              setInitialized(true);
+              // Limpiar el hash de la URL después del redirect
+              window.history.replaceState(null, '', window.location.pathname);
+            }
+          });
+        }
+      };
+
+      keycloak.onAuthError = (error) => {
+        console.error('Keycloak authentication error:', error);
+        if (mounted) {
+          setProcessingAuth(false);
+          setUser(null);
+          setToken(null);
+          setInitialized(true);
+        }
+      };
+
+      keycloak.onTokenExpired = () => {
+        console.log('Keycloak token expired, refreshing...');
+        keycloak.updateToken(30)
+          .then((refreshed) => {
+            if (refreshed && mounted && keycloak.token) {
+              setToken(keycloak.token);
+            }
+          })
+          .catch(() => {
+            console.error('Failed to refresh token');
+            if (mounted) {
+              setUser(null);
+              setToken(null);
+            }
+          });
+      };
+
+      // Prevenir inicialización múltiple
+      if (keycloak.didInitialize && keycloak.authenticated !== undefined) {
+        if (keycloak.authenticated && mounted && keycloak.token) {
           setToken(keycloak.token);
           await fetchUserProfile(keycloak.token);
           setInitialized(true);
         } else if (mounted) {
           setInitialized(true);
+          setProcessingAuth(false);
         }
         return;
       }
+
       try {
         const authenticated = await keycloak.init({
           onLoad: 'check-sso',
@@ -63,14 +122,34 @@ export const AuthProvider = ({ children }) => {
           checkLoginIframe: false
         });
 
-        if (authenticated) {
+        // Si venimos de redirect, esperar a que onAuthSuccess se dispare
+        // Si no se dispara en 3 segundos, procesar manualmente
+        if (isRedirect) {
+          authTimeout = setTimeout(() => {
+            if (mounted && authenticated && keycloak.token) {
+              setToken(keycloak.token);
+              fetchUserProfile(keycloak.token).then(() => {
+                if (mounted) {
+                  setProcessingAuth(false);
+                  setInitialized(true);
+                  window.history.replaceState(null, '', window.location.pathname);
+                }
+              });
+            } else if (mounted) {
+              setProcessingAuth(false);
+              setInitialized(true);
+            }
+          }, 3000);
+        } else if (authenticated && keycloak.token) {
+          // Flujo normal (sin redirect)
           setToken(keycloak.token);
           await fetchUserProfile(keycloak.token);
 
           refreshInterval = setInterval(async () => {
+            if (!mounted) return;
             try {
               const refreshed = await keycloak.updateToken(30);
-              if (refreshed) {
+              if (refreshed && keycloak.token) {
                 setToken(keycloak.token);
               }
             } catch (err) {
@@ -87,7 +166,12 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
         setToken(null);
       } finally {
-        setInitialized(true);
+        // Solo marcar como inicializado si NO venimos de redirect
+        // (si venimos de redirect, onAuthSuccess o el timeout lo harán)
+        if (!isRedirect && mounted) {
+          setInitialized(true);
+          setProcessingAuth(false);
+        }
       }
     };
 
@@ -96,11 +180,15 @@ export const AuthProvider = ({ children }) => {
     return () => {
       mounted = false;
       if (refreshInterval) clearInterval(refreshInterval);
+      if (authTimeout) clearTimeout(authTimeout);
+      // Limpiar listeners
+      if (keycloak.onAuthSuccess) keycloak.onAuthSuccess = undefined;
+      if (keycloak.onAuthError) keycloak.onAuthError = undefined;
+      if (keycloak.onTokenExpired) keycloak.onTokenExpired = undefined;
     };
   }, []);
 
   const contextValue = useMemo(() => {
-    // Acceder directamente a la instancia importada en cada uso
     return {
       user,
       token,
@@ -115,8 +203,15 @@ export const AuthProvider = ({ children }) => {
         }
         
         try {
-          // Siempre inicializar primero si no está inicializado
-          if (kc.didInitialize === false || kc.authenticated === undefined) {
+          // Si ya está autenticado, actualizar estado y salir
+          if (kc.authenticated && kc.token) {
+            setToken(kc.token);
+            await fetchUserProfile(kc.token);
+            return;
+          }
+
+          // Inicializar si no está inicializado
+          if (!kc.didInitialize || kc.authenticated === undefined) {
             await kc.init({
               onLoad: 'check-sso',
               pkceMethod: 'S256',
@@ -126,22 +221,19 @@ export const AuthProvider = ({ children }) => {
             });
           }
           
-          // Verificar que login existe
           if (typeof kc.login !== 'function') {
             console.error('keycloak.login is not a function');
             return;
           }
           
-          // Si ya está autenticado, no hacer login
-          if (kc.authenticated) {
-            if (kc.token) {
-              setToken(kc.token);
-              await fetchUserProfile(kc.token);
-            }
+          // Si después de init ya está autenticado, no redirigir
+          if (kc.authenticated && kc.token) {
+            setToken(kc.token);
+            await fetchUserProfile(kc.token);
             return;
           }
           
-          // Llamar a login - esto redirigirá al navegador
+          // Redirigir a Keycloak para login
           kc.login({
             redirectUri: window.location.origin,
             ...options
@@ -166,8 +258,43 @@ export const AuthProvider = ({ children }) => {
     };
   }, [user, token, initialized]);
 
+  // Pantalla de carga mientras procesa el redirect
+  if (processingAuth) {
+    return (
+      <Box 
+        sx={{ 
+          display: 'flex', 
+          flexDirection: 'column',
+          alignItems: 'center', 
+          justifyContent: 'center',
+          minHeight: '100vh',
+          gap: 2
+        }}
+      >
+        <CircularProgress size={60} />
+        <Typography variant="h6" color="text.secondary">
+          Procesando autenticación...
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Por favor espera mientras verificamos tu sesión
+        </Typography>
+      </Box>
+    );
+  }
+
   if (!initialized) {
-    return <div>Cargando autenticación…</div>;
+    return (
+      <Box 
+        sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          minHeight: '100vh'
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
