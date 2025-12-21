@@ -22,6 +22,9 @@ passlib[bcrypt]
 # JWT support
 python-jose[cryptography]
 
+# HTTP client for Keycloak JWKS
+httpx
+
 # Parse form data (OAuth2 password grant)
 python-multipart
 
