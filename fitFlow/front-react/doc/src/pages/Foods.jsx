@@ -6,6 +6,7 @@ import {
 import { Add, Edit, Delete } from '@mui/icons-material';
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 export default function Foods() {
   const { token } = useContext(AuthContext);
@@ -18,11 +19,23 @@ export default function Foods() {
   });
 
   const fetchFoods = () => {
-    fetch("http://localhost:8000/foods", {
+    if (!token) {
+      console.warn("No hay token disponible para hacer la petición");
+      return;
+    }
+    fetch(`${API_URL}/foods`, {
       headers: { Authorization: `Bearer ${token}` }
     })
-      .then(r => r.json())
-      .then(setFoods);
+      .then(r => {
+        if (!r.ok) {
+          throw new Error(`HTTP error! status: ${r.status}`);
+        }
+        return r.json();
+      })
+      .then(setFoods)
+      .catch(error => {
+        console.error("Error fetching foods:", error);
+      });
   };
 
   useEffect(() => { fetchFoods(); }, [token]);
@@ -47,37 +60,61 @@ export default function Foods() {
   };
 
   const handleSubmit = async () => {
+    if (!token) {
+      alert("No hay token disponible. Por favor, inicia sesión.");
+      return;
+    }
+    
     const method = editFood ? "PUT" : "POST";
     const url = editFood
-      ? `http://localhost:8000/foods/${editFood.food_id}`
-      : `http://localhost:8000/foods`;
+      ? `${API_URL}/foods/${editFood.food_id}`
+      : `${API_URL}/foods`;
 
-    const res = await fetch(url, {
-      method,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(form)
-    });
-    if (res.ok) {
-      fetchFoods();
-      handleClose();
-    } else {
-      alert("Error al guardar.");
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(form)
+      });
+      
+      if (res.ok) {
+        fetchFoods();
+        handleClose();
+      } else {
+        const errorData = await res.json().catch(() => ({ detail: "Error desconocido" }));
+        alert(`Error al guardar: ${errorData.detail || res.statusText}`);
+      }
+    } catch (error) {
+      console.error("Error submitting food:", error);
+      alert("Error de conexión al guardar.");
     }
   };
 
   const handleDelete = async (food_id) => {
     if (!window.confirm("¿Eliminar este alimento?")) return;
-    const res = await fetch(`http://localhost:8000/foods/${food_id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (res.ok) {
-      setFoods(foods.filter(f => f.food_id !== food_id));
-    } else {
-      alert("Error al eliminar.");
+    
+    if (!token) {
+      alert("No hay token disponible. Por favor, inicia sesión.");
+      return;
+    }
+    
+    try {
+      const res = await fetch(`${API_URL}/foods/${food_id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        setFoods(foods.filter(f => f.food_id !== food_id));
+      } else {
+        const errorData = await res.json().catch(() => ({ detail: "Error desconocido" }));
+        alert(`Error al eliminar: ${errorData.detail || res.statusText}`);
+      }
+    } catch (error) {
+      console.error("Error deleting food:", error);
+      alert("Error de conexión al eliminar.");
     }
   };
 

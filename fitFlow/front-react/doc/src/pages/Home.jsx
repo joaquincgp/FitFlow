@@ -7,7 +7,7 @@ import Lottie from 'lottie-react';
 import medicalAnimation from '../assets/homePageMainAnimationDOC.json';
 
 const Home = () => {
-  const { user } = useContext(AuthContext);
+  const { user, token } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [apiResult, setApiResult] = useState(null);
@@ -15,9 +15,9 @@ const Home = () => {
 
   const callApi = async (endpoint) => {
     setError("");
-    const token = localStorage.getItem('token');
+    // Usar token del contexto en lugar de localStorage directamente
     if (!token) {
-      setError("No hay token en localStorage.");
+      setError("No hay token disponible. Por favor, inicia sesión.");
       return;
     }
 

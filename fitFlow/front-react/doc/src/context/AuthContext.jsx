@@ -62,6 +62,8 @@ export const AuthProvider = ({ children }) => {
         console.log('Keycloak authentication successful');
         if (mounted && keycloak.token) {
           setToken(keycloak.token);
+          // Guardar token en localStorage
+          localStorage.setItem('token', keycloak.token);
           fetchUserProfile(keycloak.token).then(() => {
             if (mounted) {
               setProcessingAuth(false);
@@ -89,6 +91,8 @@ export const AuthProvider = ({ children }) => {
           .then((refreshed) => {
             if (refreshed && mounted && keycloak.token) {
               setToken(keycloak.token);
+              // Actualizar token en localStorage
+              localStorage.setItem('token', keycloak.token);
             }
           })
           .catch(() => {
@@ -96,6 +100,8 @@ export const AuthProvider = ({ children }) => {
             if (mounted) {
               setUser(null);
               setToken(null);
+              // Limpiar token de localStorage
+              localStorage.removeItem('token');
             }
           });
       };
@@ -104,6 +110,8 @@ export const AuthProvider = ({ children }) => {
       if (keycloak.didInitialize && keycloak.authenticated !== undefined) {
         if (keycloak.authenticated && mounted && keycloak.token) {
           setToken(keycloak.token);
+          // Guardar token en localStorage
+          localStorage.setItem('token', keycloak.token);
           await fetchUserProfile(keycloak.token);
           setInitialized(true);
         } else if (mounted) {
@@ -143,6 +151,8 @@ export const AuthProvider = ({ children }) => {
         } else if (authenticated && keycloak.token) {
           // Flujo normal (sin redirect)
           setToken(keycloak.token);
+          // Guardar token en localStorage
+          localStorage.setItem('token', keycloak.token);
           await fetchUserProfile(keycloak.token);
 
           refreshInterval = setInterval(async () => {
@@ -151,15 +161,19 @@ export const AuthProvider = ({ children }) => {
               const refreshed = await keycloak.updateToken(30);
               if (refreshed && keycloak.token) {
                 setToken(keycloak.token);
+                // Actualizar token en localStorage
+                localStorage.setItem('token', keycloak.token);
               }
             } catch (err) {
               console.error('Error actualizando token', err);
+              localStorage.removeItem('token');
               keycloak.logout({ redirectUri: window.location.origin });
             }
           }, 20000);
         } else {
           setUser(null);
           setToken(null);
+          localStorage.removeItem('token');
         }
       } catch (error) {
         console.error('Error inicializando Keycloak', error);
@@ -206,6 +220,7 @@ export const AuthProvider = ({ children }) => {
           // Si ya está autenticado, actualizar estado y salir
           if (kc.authenticated && kc.token) {
             setToken(kc.token);
+            localStorage.setItem('token', kc.token);
             await fetchUserProfile(kc.token);
             return;
           }
@@ -229,6 +244,7 @@ export const AuthProvider = ({ children }) => {
           // Si después de init ya está autenticado, no redirigir
           if (kc.authenticated && kc.token) {
             setToken(kc.token);
+            localStorage.setItem('token', kc.token);
             await fetchUserProfile(kc.token);
             return;
           }
@@ -249,6 +265,10 @@ export const AuthProvider = ({ children }) => {
           return;
         }
         try {
+          // Limpiar token de localStorage
+          localStorage.removeItem('token');
+          setToken(null);
+          setUser(null);
           kc.logout({ redirectUri: window.location.origin, ...options });
         } catch (error) {
           console.error('Error calling keycloak.logout:', error);
