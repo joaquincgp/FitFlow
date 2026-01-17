@@ -11,9 +11,20 @@ services:
       KEYCLOAK_CLIENT_ID: fitflow-web
       KEYCLOAK_ISSUER: http://localhost:8081/realms/fitFlow
       KEYCLOAK_JWKS_URL: http://host.docker.internal:8081/realms/fitFlow/protocol/openid-connect/certs
+      # Vault Configuration (Vault externo en localhost:8200)
+      VAULT_ADDR: http://host.docker.internal:8200
+      VAULT_TOKEN: fitflow-dev-token
+      VAULT_TRANSIT_KEY_NAME: fitflow-django-key
+      VAULT_TRANSIT_MOUNT_PATH: transit
+      ENCRYPT_REQUESTS_TO_DJANGO: "true"
+      ENCRYPT_RESPONSES_FROM_DJANGO: "true"
+      DJANGO_API_BASE_URL: http://host.docker.internal:9001
+      VAULT_REQUEST_TIMEOUT: "5"
+      VAULT_MAX_RETRIES: "3"
     volumes:
       - ./data:/app/fitFlow/data
       - ./backend:/app/fitFlow/backend
+      - ./main.py:/app/fitFlow/main.py
     restart: unless-stopped
 
   frontend:

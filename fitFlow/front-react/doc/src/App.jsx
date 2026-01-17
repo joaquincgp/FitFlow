@@ -14,6 +14,7 @@ import FoodLog from './pages/FoodLog';
 import CreateNutritionalPlan from "./pages/CreateNutritionalPlan";
 import MyPlans from "./pages/MyPlans.jsx";
 import EnhancedNutritionPlanner from "./pages/EnhancedNutritionPlanner";
+import Integrations from "./pages/Integrations";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="/my-plans" element={<MyPlans />} />
 
           <Route path="/enhanced-planner" element={<EnhancedNutritionPlanner />} />
+          <Route path="/integrations" element={<Integrations />} />
 
         </Routes>
       </div>

@@ -71,19 +71,19 @@ export default function Foods() {
       : `${API_URL}/foods`;
 
     try {
-      const res = await fetch(url, {
-        method,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(form)
-      });
+    const res = await fetch(url, {
+      method,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(form)
+    });
       
-      if (res.ok) {
-        fetchFoods();
-        handleClose();
-      } else {
+    if (res.ok) {
+      fetchFoods();
+      handleClose();
+    } else {
         const errorData = await res.json().catch(() => ({ detail: "Error desconocido" }));
         alert(`Error al guardar: ${errorData.detail || res.statusText}`);
       }
@@ -103,12 +103,12 @@ export default function Foods() {
     
     try {
       const res = await fetch(`${API_URL}/foods/${food_id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (res.ok) {
-        setFoods(foods.filter(f => f.food_id !== food_id));
-      } else {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (res.ok) {
+      setFoods(foods.filter(f => f.food_id !== food_id));
+    } else {
         const errorData = await res.json().catch(() => ({ detail: "Error desconocido" }));
         alert(`Error al eliminar: ${errorData.detail || res.statusText}`);
       }
