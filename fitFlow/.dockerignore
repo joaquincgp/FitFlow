@@ -1,0 +1,17 @@
+.git
+.idea
+.DS_Store
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.venv
+venv
+node_modules
+front-react/doc/node_modules
+front-react/doc/dist
+dist
+npm-debug.log
+Dockerfile
+docker.compose.yml

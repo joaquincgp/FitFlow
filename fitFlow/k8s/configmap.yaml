@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fitflow-config
+data:
+  DATABASE_URL: "sqlite:///./fitflow.db"
+  APP_ENV: "local-minikube"

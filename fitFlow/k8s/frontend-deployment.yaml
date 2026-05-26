@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  labels:
+    app: fitflow-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fitflow-frontend
+  template:
+    metadata:
+      labels:
+        app: fitflow-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: fitflow-frontend:local
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80

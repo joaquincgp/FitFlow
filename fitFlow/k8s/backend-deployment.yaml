@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: fitflow-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fitflow-backend
+  template:
+    metadata:
+      labels:
+        app: fitflow-backend
+    spec:
+      containers:
+        - name: backend
+          image: fitflow-backend:local
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: fitflow-config
