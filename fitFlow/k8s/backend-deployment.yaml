@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fitflow-backend
+  namespace: fitflow
+  labels:
+    app: fitflow-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fitflow-backend
+  template:
+    metadata:
+      labels:
+        app: fitflow-backend
+    spec:
+      containers:
+        - name: fitflow-backend
+          image: mattair39/fitflow-backend:v1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000

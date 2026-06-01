@@ -1,0 +1,7 @@
+.git
+.idea
+.DS_Store
+fitFlow/node_modules
+fitFlow/.idea
+__pycache__
+*.pyc
